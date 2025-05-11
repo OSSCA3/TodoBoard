@@ -1,0 +1,27 @@
+name: Feature Task
+description: 기능에 따른 세부 작업을 작성하는 템플릿입니다.
+title: '이슈 제목을 작성해주세요'
+labels: ['feature']
+assignees:
+  - your-github-username # 본인의 GitHub ID로 바꿔주세요
+
+body:
+  - type: textarea
+    id: about
+    attributes:
+      label: '##💡 About'
+      description: 무엇에 관한 이슈인지 소개해주세요.
+      placeholder: ex) 로그인 버튼 클릭 시 페이지 이동 구현
+    validations:
+      required: true
+
+  - type: textarea
+    id: todo
+    attributes:
+      label: '## 📝 To Do'
+      description: 해야 할 작업을 작성해주세요.
+      placeholder: |
+        - [ ] 로그인 API 연동
+        - [ ] 버튼 UI 구성
+    validations:
+      required: true
