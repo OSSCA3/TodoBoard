@@ -2,8 +2,6 @@ name: Feature Task
 description: 기능에 따른 세부 작업을 작성하는 템플릿입니다.
 title: '이슈 제목을 작성해주세요'
 labels: ['feature']
-assignees:
-  - your-github-username # 본인의 GitHub ID로 바꿔주세요
 
 body:
   - type: textarea
