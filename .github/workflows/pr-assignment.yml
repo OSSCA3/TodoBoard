@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [opened, ready_for_review, reopened]
 
+permissions:
+  pull-requests: write
+
 jobs:
   get_meta_data:
     runs-on: ubuntu-latest
