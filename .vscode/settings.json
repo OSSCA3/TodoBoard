@@ -3,5 +3,14 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "css.lint.unknownAtRules": "ignore"
 }
