@@ -1,0 +1,50 @@
+language: 'ko-KR'
+
+reviews:
+  profile: 'chill'
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  auto_review:
+    enabled: true
+    drafts: false
+
+  instructions: |
+    우리 팀의 리뷰 기준은 다음과 같습니다:
+
+    작업 및 협업 방식
+    - 기능 단위 브랜치 생성 (e.g. feature/기능명)
+    - 세부 작업은 이슈로 관리하고, 커밋은 작은 단위로 진행
+    - PR은 300줄 이하 권장, 카카오톡 알림, 1명 이상 리뷰 후 merge
+
+    Git 컨벤션
+    - 브랜치: feature, chore, refactor 등 유형 접두어 사용
+    - 커밋: [FE] feature: 로그인 로직 추가 와 같은 형식
+    - PR 템플릿을 지켜 기능 설명, 완료 체크리스트, 스크린샷 등 작성
+
+    코드 스타일 가이드
+    - 변수/함수: camelCase
+    - 상수: CONSTANT_CASE
+    - 파일/폴더: kebab-case, 컴포넌트 파일은 PascalCase 가능
+    - props interface는 컴포넌트 상단에 명시, 구조 분해 할당 사용
+    - interface 우선, type은 fallback
+    - Tailwind 사용, 스타일 컴포넌트 네이밍: Layout, Container, Wrapper, List, Item
+    - Prettier + ESLint 적용 유지
+
+    디렉토리 구조
+    - src/components, hooks, app, styles 등 역할별로 정리
+    - 각 디렉토리 목적에 맞는 파일 배치
+
+    Next.js 사용 방식
+    - App Router 구조
+    - Server Component와 Client Component를 적절히 분리 ("use client" 여부 판단)
+
+
+    기타
+    - 재사용성과 모듈화 중시
+    - 리팩토링 주기적으로 수행
+    - 불필요한 re-render 방지 (e.g. selector 기반 상태 구독)
+
+chat:
+  auto_reply: true
