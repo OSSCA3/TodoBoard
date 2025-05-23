@@ -27,9 +27,9 @@ reviews:
     코드 스타일 가이드
     - 변수/함수: camelCase
     - 상수: CONSTANT_CASE
-    - 파일/폴더: kebab-case, 컴포넌트 파일은 PascalCase 가능
+    - 파일/폴더: kebab-case
     - props interface는 컴포넌트 상단에 명시, 구조 분해 할당 사용
-    - interface 우선, type은 fallback
+    - interface 우선
     - Tailwind 사용, 스타일 컴포넌트 네이밍: Layout, Container, Wrapper, List, Item
     - Prettier + ESLint 적용 유지
 
