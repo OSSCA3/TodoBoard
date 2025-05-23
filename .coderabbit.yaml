@@ -6,6 +6,7 @@ reviews:
   high_level_summary: true
   poem: false
   review_status: true
+  collapse_walkthrough: false
   auto_review:
     enabled: true
     drafts: false
@@ -16,7 +17,7 @@ reviews:
     작업 및 협업 방식
     - 기능 단위 브랜치 생성 (e.g. feature/기능명)
     - 세부 작업은 이슈로 관리하고, 커밋은 작은 단위로 진행
-    - PR은 300줄 이하 권장, 카카오톡 알림, 1명 이상 리뷰 후 merge
+    - PR은 300줄 이하 권장, 1명 이상 리뷰 후 merge
 
     Git 컨벤션
     - 브랜치: feature, chore, refactor 등 유형 접두어 사용
