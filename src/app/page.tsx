@@ -7,9 +7,9 @@ import DashboardGrid from '@/components/ui/dashboard-grid';
 
 export default function Home() {
   return (
-    <div className="p-6 bg-[#F3EFFE] min-h-fit">
+    <main className="p-6 bg-[#F3EFFE] min-h-fit">
       <h1>넥스트의 대시보드</h1>
-      <section>
+      <section className="pt-6">
         <DashboardGrid>
           <Card>
             <TodoList />
@@ -25,6 +25,6 @@ export default function Home() {
           </Card>
         </DashboardGrid>
       </section>
-    </div>
+    </main>
   );
 }
