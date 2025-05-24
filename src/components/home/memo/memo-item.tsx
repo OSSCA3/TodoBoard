@@ -7,10 +7,10 @@ interface MemoListProps {
 }
 const MemoListItem = ({ memo }: MemoListProps) => {
   return (
-    <li className="flex justify-between w-full items-center border-b border-gray-200 last:border-b-0 py-2">
-      <div className="flex flex-col">
+    <li className="gap-2 flex justify-between w-full items-center border-b border-gray-200 last:border-b-0 py-2 select-none">
+      <div className="w-full flex flex-col cursor-pointer">
         <span className="font-semibold">{memo.title}</span>
-        <span>{memo.content}</span>
+        <span className="truncate max-w-[340px]">{memo.content}</span>
       </div>
       <IoIosMore className="text-xl cursor-pointer" />
     </li>

@@ -19,6 +19,7 @@ export const mockMemoData: MemoItem[] = [
   {
     id: 4,
     title: '지금 플리 deja vu',
-    content: 'singin in harmony',
+    content:
+      'she thinks its special, but its all reused That was our place, I found it first I made the jokes',
   },
 ];
