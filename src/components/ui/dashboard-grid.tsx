@@ -5,7 +5,7 @@ interface DashboardGridProps {
 }
 const DashboardGrid = ({ children }: DashboardGridProps) => {
   return (
-    <div className="grid justify-items-center gap-8 w-full h-full grid-cols-2 ">
+    <div className="grid justify-items-center gap-8 w-full h-full grid-cols-2">
       {children}
     </div>
   );
