@@ -24,7 +24,11 @@ const TodoListItem = ({ todo }: TodoListProps) => {
           <span>{todo.date}</span>
         </div>
       </div>
-      <IoIosMore className="text-xl cursor-pointer" />
+      <IoIosMore
+        className="text-xl cursor-pointer hover:text-gray-400 flex-shrink-0"
+        aria-label="Todo 옵션"
+        role="button"
+      />
     </li>
   );
 };

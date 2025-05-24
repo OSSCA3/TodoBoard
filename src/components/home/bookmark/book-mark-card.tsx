@@ -13,7 +13,11 @@ const BookMarkCard = ({ bookmark }: BookMarkCardProps) => {
         <div>{bookmark.description}</div>
       </div>
 
-      <IoIosMore className="text-xl cursor-pointer" />
+      <IoIosMore
+        className="text-xl cursor-pointer hover:text-gray-400 flex-shrink-0"
+        aria-label="북마크 옵션"
+        role="button"
+      />
     </div>
   );
 };
