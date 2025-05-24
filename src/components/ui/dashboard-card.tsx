@@ -5,7 +5,7 @@ interface CardProps {
 }
 const Card = ({ children }: CardProps) => {
   return (
-    <div className="max-w-[480px] min-h-96 w-full p-4 rounded-lg shadow">
+    <div className="max-w-[480px] min-h-80 w-full bg-[#FFFEFE] rounded-lg shadow px-8 py-[26px] dashboard-card">
       {children}
     </div>
   );
