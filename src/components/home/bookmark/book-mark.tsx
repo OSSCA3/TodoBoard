@@ -12,7 +12,7 @@ const BookMark = () => {
           <FiPlus />
         </button>
       </div>
-      <div className="grid justify-items-center grid-cols-2 gap-2">
+      <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 gap-2">
         {mockBookmarkData.map((bookmark) => (
           <BookMarkCard key={bookmark.id} bookmark={bookmark} />
         ))}
