@@ -13,9 +13,13 @@ const Memo = () => {
         </button>
       </div>
       <ul className="flex flex-col gap-1 mt-4">
-        {mockMemoData.map((memo) => (
-          <MemoListItem key={memo.id} memo={memo} />
-        ))}
+        {mockMemoData.length > 0 ? (
+          mockMemoData.map((memo) => <MemoListItem key={memo.id} memo={memo} />)
+        ) : (
+          <li className="text-gray-500 text-center py-4">
+            작성된 메모가 없습니다
+          </li>
+        )}
       </ul>
     </div>
   );
