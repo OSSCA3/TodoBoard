@@ -1,12 +1,15 @@
+import { mockTodoData } from '@/mocks/todos';
 import React from 'react';
+import TodoListItem from './todo-item';
 
 const TodoList = () => {
   return (
     <div className="rounded-xl h-full w-full">
       <h2>할 일 리스트</h2>
-      <ul>
-        <li>할 일 리스트 샘플입니다</li>
-        <li>할 일 리스트 샘플입니다</li>
+      <ul className="flex flex-col justify-between items-start">
+        {mockTodoData.map((todo) => (
+          <TodoListItem key={todo.id} todo={todo} />
+        ))}
       </ul>
     </div>
   );
