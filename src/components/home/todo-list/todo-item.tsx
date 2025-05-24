@@ -9,7 +9,7 @@ interface TodoListProps {
   todo: TodoItem;
 }
 const TodoListItem = ({ todo }: TodoListProps) => {
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(todo.isCompleted);
 
   const handleIsCompleted = () => {
     setIsCompleted((prev) => !prev);

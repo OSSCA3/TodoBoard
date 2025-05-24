@@ -6,7 +6,7 @@ const TodoList = () => {
   return (
     <div className="rounded-xl h-full w-full">
       <h2>할 일 리스트</h2>
-      <ul className="flex flex-col justify-between items-start">
+      <ul className="flex flex-col gap-2">
         {mockTodoData.map((todo) => (
           <TodoListItem key={todo.id} todo={todo} />
         ))}
