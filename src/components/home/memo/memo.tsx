@@ -12,7 +12,7 @@ const Memo = () => {
       </div>
       <ul className="flex flex-col justify-between items-start">
         {mockMemoData.map((memo) => (
-          <MemoListItem memo={memo} />
+          <MemoListItem key={memo.id} memo={memo} />
         ))}
       </ul>
     </div>

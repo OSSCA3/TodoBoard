@@ -12,7 +12,7 @@ const BookMark = () => {
       </div>
       <div className="grid justify-items-center grid-cols-2 gap-2">
         {mockBookmarkData.map((bookmark) => (
-          <BookMarkCard bookmark={bookmark} />
+          <BookMarkCard key={bookmark.id} bookmark={bookmark} />
         ))}
       </div>
     </div>
