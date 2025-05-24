@@ -8,7 +8,9 @@ const BookMark = () => {
     <div className="rounded-xl h-full">
       <div className="flex justify-between items-center">
         <h2>북마크</h2>
-        <FiPlus className="text-xl cursor-pointer" />
+        <button className="text-xl cursor-pointer">
+          <FiPlus />
+        </button>
       </div>
       <div className="grid justify-items-center grid-cols-2 gap-2">
         {mockBookmarkData.map((bookmark) => (

@@ -8,7 +8,9 @@ const Memo = () => {
     <div className="rounded-xl h-full w-full">
       <div className="flex justify-between items-center">
         <h2>메모</h2>
-        <FiPlus className="text-xl cursor-pointer" />
+        <button className="text-xl cursor-pointer">
+          <FiPlus />
+        </button>
       </div>
       <ul className="flex flex-col justify-between items-start">
         {mockMemoData.map((memo) => (
