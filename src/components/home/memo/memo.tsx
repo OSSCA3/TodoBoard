@@ -12,7 +12,7 @@ const Memo = () => {
           <FiPlus />
         </button>
       </div>
-      <ul className="flex flex-col justify-between items-start">
+      <ul className="flex flex-col gap-1 mt-4">
         {mockMemoData.map((memo) => (
           <MemoListItem key={memo.id} memo={memo} />
         ))}

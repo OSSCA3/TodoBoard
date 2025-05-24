@@ -7,7 +7,7 @@ interface BookMarkCardProps {
 }
 const BookMarkCard = ({ bookmark }: BookMarkCardProps) => {
   return (
-    <div className="min-w-[200px] max-w-[270px] border rounded min-h-28 max-h-32 flex justify-between items-center p-6">
+    <div className="min-w-[200px] max-w-[270px] border rounded min-h-28 max-h-32 flex justify-between items-center p-6 mt-4">
       <div className="cursor-pointer">
         <div>{bookmark.title}</div>
         <div>{bookmark.description}</div>
