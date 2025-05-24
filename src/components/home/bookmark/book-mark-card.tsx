@@ -8,10 +8,15 @@ interface BookMarkCardProps {
 const BookMarkCard = ({ bookmark }: BookMarkCardProps) => {
   return (
     <div className="w-full border rounded min-h-28 max-h-32 flex justify-between items-center p-6 mt-4">
-      <div className="cursor-pointer">
+      <a
+        className="cursor-pointer"
+        href={bookmark.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <div>{bookmark.title}</div>
         <div>{bookmark.description}</div>
-      </div>
+      </a>
 
       <IoIosMore
         className="text-xl cursor-pointer hover:text-gray-400 flex-shrink-0"
