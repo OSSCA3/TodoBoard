@@ -1,15 +1,35 @@
-import React from 'react';
+import { fetchDevNews } from '@/libs/api/fetchDevNews';
 
-const DevNews = () => {
-  return (
-    <div className="rounded-xl h-full w-full">
-      <h2>개발 관련 소식</h2>
-      <ul>
-        <li>메모 리스트 샘플입니다</li>
-        <li>메모 리스트 샘플입니다</li>
-      </ul>
-    </div>
-  );
+const DevNews = async () => {
+  try {
+    const articles = await fetchDevNews();
+
+    return (
+      <div className="rounded-xl h-full w-full">
+        <h2>개발 관련 소식</h2>
+        <div className="space-y-4 overflow-y-auto flex-1 mt-4 max-h-[330px]">
+          {articles.map(({ title, description, tag_list }, index) => (
+            <div key={index} className="border-b pb-2">
+              <h3 className="font-semibold">{title}</h3>
+              <p className="text-sm text-gray-500">{description}</p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tag_list.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="text-xs bg-purple-100 px-2 py-1 rounded"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  } catch (error) {
+    return <p className="text-red-500">Failed to load</p>;
+  }
 };
 
 export default DevNews;
