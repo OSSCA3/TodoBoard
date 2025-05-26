@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 const BUTTON_VARIANTS = {
   primary: 'bg-[#8B5CF6] text-[#FFFEFE] hover:bg-[#7d53dd]',
@@ -12,15 +12,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof BUTTON_VARIANTS;
 }
 
-const Button = ({ variant = 'primary', className, ...props }: ButtonProps) => {
-  return (
-    <button
-      className={`px-3 py-2.5 rounded-md text-sm font-medium cursor-pointer ${BUTTON_VARIANTS[variant]} ${className || ''}`}
-      {...props}
-    >
-      {props.children}
-    </button>
-  );
-};
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant = 'primary', className, type = 'button', ...props }, ref) => {
+    return (
+      <button
+        className={`px-3 py-2.5 rounded-md text-sm font-medium cursor-pointer ${BUTTON_VARIANTS[variant]} ${className || ''}`}
+        type={type} // NOTE: 기본값을 'button'으로 설정해서 의도치않은 submit 방지
+        ref={ref}
+        {...props}
+      >
+        {props.children}
+      </button>
+    );
+  },
+);
 
+Button.displayName = 'Button';
 export default Button;

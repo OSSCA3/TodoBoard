@@ -18,7 +18,11 @@ const ModalFooter = ({
       <Button variant="secondary" onClick={onClose}>
         닫기
       </Button>
-      <Button onClick={onSubmit} form={formId}>
+      <Button
+        onClick={onSubmit}
+        form={formId}
+        type={formId ? 'submit' : 'button'}
+      >
         {submitText}
       </Button>
     </div>
