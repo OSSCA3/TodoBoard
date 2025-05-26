@@ -17,6 +17,9 @@ const TextArea = ({
 
   const isControlled = value !== undefined;
   const isCheckMaxLength = maxLength !== undefined;
+  const currentLength = isControlled
+    ? value.toString().length
+    : internalValue.toString().length;
 
   const changeValue = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = event.target.value;
@@ -47,7 +50,7 @@ const TextArea = ({
       />
       {isCheckMaxLength && (
         <div className="mt-1 text-right text-xs text-[#989898]">
-          {internalValue.toString().length}/{maxLength}
+          {currentLength}/{maxLength}
         </div>
       )}
     </div>
