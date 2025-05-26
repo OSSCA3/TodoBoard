@@ -13,7 +13,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', className, type = 'button', ...props }, ref) => {
+  (
+    { variant = 'primary', className, type = 'button', children, ...props },
+    ref,
+  ) => {
     return (
       <button
         className={`px-3 py-2.5 rounded-md text-sm font-medium cursor-pointer ${BUTTON_VARIANTS[variant]} ${className || ''}`}
@@ -21,7 +24,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {props.children}
+        {children}
       </button>
     );
   },
