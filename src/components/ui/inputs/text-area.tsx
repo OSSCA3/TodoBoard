@@ -40,7 +40,7 @@ const TextArea = ({
       className={`w-full px-3 py-2.5 rounded-md border border-[#8B5CF6] ${className || ''}`}
     >
       <textarea
-        className="w-full px-1 text-black placeholder:text-[#989898] focus:outline-[##6f4ac5] focus-visible:outline-[#6f4ac5]"
+        className="w-full px-1 text-black placeholder:text-[#989898] focus:outline-[#6f4ac5] focus-visible:outline-[#6f4ac5]"
         onChange={changeValue}
         value={isControlled ? value : undefined} // 제어 컴포넌트인 경우 부모 컴포넌트의 value 사용
         {...props}
