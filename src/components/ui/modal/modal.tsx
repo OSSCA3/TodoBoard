@@ -30,13 +30,13 @@ const Modal = ({
 
   return (
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-header"
       className="fixed inset-0 z-50 flex items-center justify-center bg-[#3b3b3b]/60"
       onClick={onClose || goBack}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-header"
         className={`rounded-2xl bg-[#FFFEFE] max-w-xl min-w-96 ${className || ''}`}
         onClick={(clickEvent) => clickEvent.stopPropagation()} // NOTE : modal content 클릭 시에 overlay로 클릭 이벤트가 전파되지 않도록 함
         {...props}
