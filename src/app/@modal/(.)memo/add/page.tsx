@@ -1,12 +1,18 @@
 'use client';
 
 import { FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input, TextArea } from '@/components/ui/inputs';
 import { Modal } from '@/components/ui/modal/index';
 import { MEMO_CONTENT_MAX_LENGTH } from '@/constants/memo';
+import { addMemo } from '@/libs/api/memo';
+
+const UNKNOWN_ERROR_MESSAGE = '메모를 저장하는 중 오류가 발생했습니다.';
 
 const AddMemoModal = () => {
-  const saveMemo = (formEvent: FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const saveMemo = async (formEvent: FormEvent<HTMLFormElement>) => {
     formEvent.preventDefault();
 
     const formData = new FormData(formEvent.currentTarget);
@@ -22,7 +28,16 @@ const AddMemoModal = () => {
       return;
     }
 
-    console.log('[TODO] 메모 저장 로직 추가: ', { title, content }); // TODO
+    try {
+      await addMemo(title, content);
+      router.back(); // 북마크 저장 후 이전 페이지로 리다이렉트
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+        return;
+      }
+      alert(UNKNOWN_ERROR_MESSAGE);
+    }
   };
 
   return (
