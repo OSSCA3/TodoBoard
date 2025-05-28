@@ -1,3 +1,5 @@
+'use client';
+
 import { HTMLAttributes, PropsWithChildren } from 'react';
 import { useRouter } from 'next/navigation';
 import ModalHeader from './modal-header';
