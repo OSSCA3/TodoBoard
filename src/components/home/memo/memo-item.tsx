@@ -1,9 +1,9 @@
-import { MemoItem } from '@/types/memo';
+import { Memo } from '@/types/memo';
 import React from 'react';
 import { IoIosMore } from 'react-icons/io';
 
 interface MemoListProps {
-  memo: MemoItem;
+  memo: Memo;
 }
 const MemoListItem = ({ memo }: MemoListProps) => {
   return (

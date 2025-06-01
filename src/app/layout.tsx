@@ -1,5 +1,6 @@
+import { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
+import '@/styles/globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -13,8 +14,10 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
+  modal: ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -23,6 +26,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        {modal}
       </body>
     </html>
   );
