@@ -1,6 +1,6 @@
 export interface TodoItem {
   id: number;
-  content: string;
+  title: string;
   date: string;
   isCompleted: boolean;
   dueDate: string;

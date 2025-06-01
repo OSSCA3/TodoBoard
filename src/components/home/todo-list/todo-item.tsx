@@ -20,8 +20,8 @@ const TodoListItem = ({ todo }: TodoListProps) => {
       <div className="flex items-center gap-3">
         <CheckBox isCompleted={isCompleted} onClick={handleIsCompleted} />
         <div className="flex flex-col cursor-pointer truncate max-w-[340px]">
-          <span>{todo.content}</span>
-          <span>{todo.date}</span>
+          <span>{todo.title}</span>
+          <span>{todo.dueDate} 까지</span>
         </div>
       </div>
       <IoIosMore
