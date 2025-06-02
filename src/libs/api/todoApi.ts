@@ -35,16 +35,10 @@ export async function updateTodoCompletionFromApi(
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      const errorMessage =
-        errorData?.details ||
-        errorData?.error ||
-        `Failed to update todo completion status: ${response.status}`;
-      throw new Error(errorMessage);
+      throw new Error(`Todo 업데이트 실패: ${response.status}`);
     }
 
-    const updatedTodo = await response.json();
-    return updatedTodo;
+    return await response.json();
   } catch (error) {
     console.error('Error in updateTodoCompletionFromApi:', error);
     throw error;
