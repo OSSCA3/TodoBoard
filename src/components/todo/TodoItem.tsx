@@ -33,12 +33,12 @@ export default function TodoItem({
   const disabled = isDragDisabled(todo.id);
   const beingDragged = isBeingDragged(todo.id);
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: `todo-${todo.id}`,
-      data: dragData,
-      disabled: disabled,
-    });
+  // 드래그 설정
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: `todo-${todo.id}`,
+    data: dragData,
+    disabled: disabled,
+  });
 
   const style = transform
     ? {

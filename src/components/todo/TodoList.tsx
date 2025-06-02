@@ -5,57 +5,50 @@ import { useDragStore } from '@/store/todo/dragStore';
 import TodoItem from './TodoItem';
 
 interface TodoListProps {
-  todos: Todo[];
   priority: PriorityType;
 }
 
-export default function TodoList({ todos, priority }: TodoListProps) {
-  // 로컬 메뉴 상태 관리 (전역에서 로컬로 개선)
+export default function TodoList({ priority }: TodoListProps) {
+  // 로컬 메뉴 상태 관리
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
-  // Todo 데이터 관련 - useTodoStore
-  const allTodos = useTodoStore((state) => state.todos);
+  // 이미 처리된 데이터를 직접 가져오기 (중복 필터링 완전 제거)
+  const processedTodos = useTodoStore((state) => state.processedTodos);
+  const { incomplete: incompleteTodos, completed: completedTodos } =
+    processedTodos[priority];
 
-  // 드래그 관련 - useDragStore
+  // 드래그 관련
   const dropHintState = useDragStore((state) => state.dropHintState);
   const dragState = useDragStore((state) => state.dragState);
 
-  // 현재 드래그 중인 Todo 찾기
+  // 드래그 중인 Todo의 완료 상태 확인
+  const allTodos = useTodoStore((state) => state.todos);
   const draggedTodo = dragState.draggedTodoId
     ? allTodos.find((todo) => todo.id === Number(dragState.draggedTodoId))
     : null;
 
-  // 현재 사분면이 드롭 타겟인지 확인
-  const isCurrentQuadrantTarget =
+  // 드롭 힌트 로직 단순화
+  const showDropHint =
     dropHintState.isVisible && dropHintState.targetPriority === priority;
+  const draggedIsCompleted = draggedTodo?.isCompleted ?? false;
 
   const toggleMenu = (id: number) => {
-    setOpenMenuId((currentId) => (currentId === id ? null : id));
-  };
-  const closeMenu = () => {
-    setOpenMenuId(null);
+    setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
-  if (!todos || todos.length === 0) {
+  const closeMenu = () => setOpenMenuId(null);
+
+  // 빈 상태 처리
+  if (incompleteTodos.length === 0 && completedTodos.length === 0) {
     return (
       <div className="todo-list">
         <p className="todo-text-muted todo-list-empty-message">
           이 섹션에는 할 일이 없습니다.
         </p>
-        {/* 빈 섹션에서도 현재 사분면이 타겟일 때만 드롭 힌트 표시 */}
-        {isCurrentQuadrantTarget && (
-          <div className="todo-drop-hint">
-            <div className="todo-drop-hint-line"></div>
-            <div className="todo-drop-hint-text">여기에 추가됩니다</div>
-          </div>
-        )}
+        {showDropHint && <DropHint />}
       </div>
     );
   }
-
-  // 완료/미완료로 분리 (store에서 이미 정렬된 데이터를 다시 분리)
-  const incompleteTodos = todos.filter((todo) => !todo.isCompleted);
-  const completedTodos = todos.filter((todo) => todo.isCompleted);
 
   const renderTodoSection = (sectionTodos: Todo[], sectionTitle: string) => {
     if (sectionTodos.length === 0) return null;
@@ -81,34 +74,21 @@ export default function TodoList({ todos, priority }: TodoListProps) {
     );
   };
 
-  // 드롭 힌트를 표시할 위치 결정 (현재 사분면이 타겟일 때만)
-  const shouldShowHintAfterIncomplete =
-    isCurrentQuadrantTarget && (!draggedTodo || !draggedTodo.isCompleted); // 드래그 중인 항목이 미완료이거나 항목을 찾을 수 없는 경우
-
-  const shouldShowHintAfterComplete =
-    isCurrentQuadrantTarget && draggedTodo && draggedTodo.isCompleted;
-
   return (
     <div className="todo-list">
       {renderTodoSection(incompleteTodos, '미완료')}
-
-      {/* 미완료 항목을 드래그하는 경우 미완료 섹션 아래에 드롭 힌트 표시 */}
-      {shouldShowHintAfterIncomplete && (
-        <div className="todo-drop-hint">
-          <div className="todo-drop-hint-line"></div>
-          <div className="todo-drop-hint-text">여기에 추가됩니다</div>
-        </div>
-      )}
+      {showDropHint && !draggedIsCompleted && <DropHint />}
 
       {renderTodoSection(completedTodos, '완료')}
-
-      {/* 완료된 항목을 드래그하는 경우 완료 섹션 아래에 드롭 힌트 표시 */}
-      {shouldShowHintAfterComplete && (
-        <div className="todo-drop-hint">
-          <div className="todo-drop-hint-line"></div>
-          <div className="todo-drop-hint-text">여기에 추가됩니다</div>
-        </div>
-      )}
+      {showDropHint && draggedIsCompleted && <DropHint />}
     </div>
   );
 }
+
+// 드롭 힌트 컴포넌트 분리로 재사용성 향상
+const DropHint = () => (
+  <div className="todo-drop-hint">
+    <div className="todo-drop-hint-line"></div>
+    <div className="todo-drop-hint-text">여기에 추가됩니다</div>
+  </div>
+);
