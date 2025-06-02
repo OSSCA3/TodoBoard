@@ -1,13 +1,27 @@
 'use client';
 
+import { useState } from 'react';
 import { createClient } from '@/libs/supabase/client';
 import Button from '@/components/ui/buttons/button';
 
 export default function LoginPage() {
   const supabase = createClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({ provider: 'google' });
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (error) {
+        console.error('로그인 실패:', error.message);
+      }
+    } catch (error) {
+      console.error('로그인 중 오류 발생:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
