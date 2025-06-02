@@ -2,7 +2,18 @@ import { create } from 'zustand';
 import { Todo, PriorityType } from '@/types/todo';
 import { fetchAllTodosFromApi } from '@/libs/api/todoApi'; // API 호출 함수 임포트
 
-// ===== 1. 데이터 처리 헬퍼 함수들 =====
+// ===== 1. 유틸리티 헬퍼 함수들 =====
+
+// 날짜를 yyyy-MM-dd 형식으로 변환하는 헬퍼 함수
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
+// ===== 2. 데이터 처리 헬퍼 함수들 =====
 // 모든 todos를 날짜별로 정렬하는 함수
 const sortTodosByDate = (todos: Todo[]): Todo[] => {
   const today = new Date();
