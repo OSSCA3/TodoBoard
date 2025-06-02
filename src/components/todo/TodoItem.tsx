@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Todo } from '@/types/todo';
 import { formatDate, useTodoStore } from '@/store/todoStore';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useDropdownPosition } from '@/hooks/useDropdownPosition';
 
 interface TodoItemProps {
   todo: Todo;
@@ -20,41 +22,11 @@ export default function TodoItem({
   const editTodo = useTodoStore((state) => state.editTodo);
   const deleteTodo = useTodoStore((state) => state.deleteTodo);
 
-  const [dropdownUp, setDropdownUp] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // 외부 클릭 감지를 위한 useEffect
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isMenuOpen &&
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
-        onMenuClose();
-      }
-    };
-
-    if (isMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isMenuOpen, onMenuClose]);
-
-  // 드롭다운 위치 계산
-  useEffect(() => {
-    if (isMenuOpen && menuRef.current) {
-      const rect = menuRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const spaceBelow = viewportHeight - rect.bottom;
-
-      // 아래쪽 공간이 100px 미만이면 위쪽으로 표시
-      setDropdownUp(spaceBelow < 100);
-    }
-  }, [isMenuOpen]);
+  // 커스텀 훅 사용
+  useClickOutside({ ref: menuRef, isOpen: isMenuOpen, onClose: onMenuClose });
+  const dropdownUp = useDropdownPosition({ ref: menuRef, isOpen: isMenuOpen });
 
   return (
     <div className="todo-item">
