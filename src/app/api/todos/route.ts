@@ -12,6 +12,7 @@ export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('todo')
     .select('*')
+    .order('priority', { ascending: true })
     .order('order', { ascending: true });
 
   if (error) {
@@ -23,4 +24,34 @@ export async function GET() {
   }
 
   return NextResponse.json({ todos: data });
+}
+
+export async function PATCH(request: Request) {
+  const url = new URL(request.url);
+  const id = url.searchParams.get('id');
+  const body = await request.json();
+
+  if (!id) {
+    return NextResponse.json(
+      { error: 'Todo ID가 필요합니다.' },
+      { status: 400 },
+    );
+  }
+
+  const { data, error } = await supabaseAdmin
+    .from('todo')
+    .update(body)
+    .eq('id', parseInt(id))
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Todo 업데이트 실패', error);
+    return NextResponse.json(
+      { error: 'Todo 업데이트 중 오류가 발생했습니다.' },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json(data);
 }

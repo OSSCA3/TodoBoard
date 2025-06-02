@@ -1,0 +1,410 @@
+/* Todo Page Styles */
+
+/* Page Layout */
+.todo-page {
+  @apply bg-purple-50 text-black min-h-screen p-4 flex flex-col box-border;
+}
+
+@media (min-width: 768px) {
+  .todo-page {
+    @apply p-6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .todo-page {
+    @apply h-screen overflow-y-auto;
+  }
+}
+
+.todo-container {
+  @apply w-full max-w-none mx-auto flex-1 flex flex-col min-h-0;
+}
+
+.todo-main-title {
+  @apply text-2xl font-bold text-black mb-4 flex-shrink-0 text-left;
+}
+
+@media (min-width: 768px) {
+  .todo-main-title {
+    @apply text-3xl mb-6;
+  }
+}
+
+/* Grid Layout */
+.todo-grid {
+  @apply grid grid-cols-1 gap-4 flex-1 min-h-0 pb-4 auto-rows-min;
+}
+
+@media (min-width: 1024px) {
+  .todo-grid {
+    @apply grid-cols-2 gap-8 pb-0 h-auto auto-rows-auto grid-rows-[1fr_1fr];
+  }
+}
+
+/* Quadrant Styles */
+.todo-quadrant {
+  @apply bg-white rounded-lg px-4 py-3 flex flex-col overflow-x-hidden overflow-y-visible shadow-md;
+  @apply h-75 min-h-75 max-h-75;
+}
+
+.quadrant-header {
+  @apply flex justify-between items-center mb-4 mt-4 flex-shrink-0;
+}
+
+.add-button {
+  @apply bg-transparent border-none cursor-pointer p-1 flex items-center justify-center rounded transition-colors duration-200;
+}
+
+.add-button:hover {
+  @apply bg-gray-100;
+}
+
+.add-icon {
+  @apply w-6 h-6 text-gray-500;
+}
+
+@media (min-width: 768px) {
+  .todo-quadrant {
+    @apply px-6 h-80 min-h-80 max-h-80;
+  }
+}
+
+@media (min-width: 1024px) {
+  .todo-quadrant {
+    @apply py-1 px-6 h-auto min-h-62.5 max-h-none;
+  }
+}
+
+/* Typography */
+.todo-text {
+  @apply text-black;
+}
+
+.todo-text-muted {
+  @apply text-gray-500;
+}
+
+.todo-text-completed {
+  @apply text-gray-400;
+}
+
+.quadrant-title {
+  @apply text-black font-bold text-2xl flex-shrink-0;
+}
+
+.todo-section-title,
+.todo-section-count {
+  @apply text-[13px] leading-[0.78] font-medium;
+}
+
+/* Scrollable content area */
+.content {
+  @apply flex-1 overflow-x-hidden overflow-y-auto relative min-h-0 max-h-full;
+}
+
+.content::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* 스크롤 컨테이너 내부 */
+.scroll-inner {
+  @apply flex flex-col pb-20 min-h-0 w-full box-border;
+}
+
+/* Item Styles */
+.todo-item {
+  @apply bg-transparent py-3 border-b border-gray-200 transition-colors duration-200;
+}
+
+.todo-item:last-child {
+  @apply border-b-0;
+}
+
+.todo-item:hover {
+  @apply bg-gray-100;
+}
+
+.todo-item-content {
+  @apply flex items-center gap-3;
+}
+
+.todo-item-checkbox {
+  @apply w-5 h-5 rounded border-2 border-gray-300 cursor-pointer flex-shrink-0;
+  accent-color: #6750a4;
+}
+
+.todo-item-checkbox:focus {
+  @apply outline-2 outline-violet-600 outline-offset-2;
+}
+
+.todo-item-title {
+  @apply text-sm font-medium leading-5;
+}
+
+.todo-item-date {
+  @apply text-xs mt-1;
+}
+
+.todo-item-title-completed {
+  @apply line-through;
+}
+
+/* Section spacing */
+.todo-section {
+  @apply flex-shrink min-h-0;
+}
+
+.todo-section-header {
+  @apply items-center gap-1 bg-white text-violet-600 py-3 px-4 rounded inline-flex border border-violet-600 text-sm font-medium;
+}
+
+.todo-section-items {
+  @apply mt-2;
+}
+
+/* TodoList Styles */
+.todo-list {
+  @apply flex flex-col gap-4 min-h-0 flex-shrink;
+}
+
+.todo-list-empty-message {
+  @apply text-sm;
+}
+
+/* Menu Styles */
+.todo-menu-container {
+  @apply relative;
+}
+
+.todo-menu-button {
+  @apply w-8 h-8 flex items-center justify-center rounded-full bg-transparent border-none text-gray-500 cursor-pointer transition-all duration-200 flex-shrink-0;
+}
+
+.todo-menu-button:hover {
+  @apply bg-gray-100 text-gray-700;
+}
+
+/* 3점 버튼 스타일 - 커스텀 유지 */
+.todo-menu-dots {
+  @apply w-1 h-1 bg-current rounded-full relative;
+}
+
+.todo-menu-dots::before,
+.todo-menu-dots::after {
+  content: '';
+  @apply absolute w-1 h-1 bg-current rounded-full left-0;
+}
+
+.todo-menu-dots::before {
+  @apply -top-1.5;
+}
+
+.todo-menu-dots::after {
+  @apply top-1.5;
+}
+
+.todo-menu-dropdown {
+  @apply absolute right-0 top-full mt-1 w-12 bg-white border border-gray-200 rounded-md overflow-hidden shadow-lg z-50;
+}
+
+/* 드롭다운이 화면 하단에 가까울 때 위로 표시 */
+.todo-menu-dropdown.dropdown-up {
+  @apply top-auto bottom-full mt-0 mb-1;
+}
+
+.todo-menu-item {
+  @apply w-full p-3 flex items-center justify-center bg-transparent border-none text-gray-700 cursor-pointer transition-colors duration-200;
+}
+
+.todo-menu-item:hover {
+  @apply bg-gray-100;
+}
+
+.todo-menu-item.delete {
+  @apply text-red-600;
+}
+
+.todo-menu-item.delete:hover {
+  @apply bg-gray-100;
+}
+
+.todo-menu-icon {
+  @apply w-5 h-5;
+}
+
+/* Page Status Styles (Loading/Error) */
+.todo-loading {
+  @apply flex flex-col justify-center items-center min-h-screen gap-8;
+}
+
+.todo-error {
+  @apply flex flex-col justify-center items-center min-h-screen gap-6;
+}
+
+.todo-error-icon {
+  @apply text-8xl;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  @apply w-16 h-16 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin;
+}
+
+.loading-dots {
+  @apply flex gap-2;
+}
+
+.loading-dot {
+  @apply w-3 h-3 bg-violet-600 rounded-full animate-bounce;
+}
+
+.loading-dot:nth-child(1) {
+  @apply delay-[-320ms];
+}
+.loading-dot:nth-child(2) {
+  @apply delay-[-160ms];
+}
+.loading-dot:nth-child(3) {
+  @apply delay-[0ms];
+}
+
+.todo-status-message {
+  @apply text-2xl font-medium;
+}
+
+.todo-loading p {
+  @apply text-xl font-medium;
+}
+
+.todo-retry-button {
+  @apply mt-4 py-3 px-6 bg-blue-500 text-white rounded-lg border-none cursor-pointer transition-colors duration-200 text-lg font-medium;
+}
+
+.todo-retry-button:hover {
+  @apply bg-blue-600;
+}
+
+/* ========================================
+   📌 DRAG & DROP 스타일
+======================================== */
+
+/* 드래그 중인 아이템 */
+.todo-item-dragging {
+  @apply opacity-0 pointer-events-none relative;
+  @apply transform-none transition-none;
+}
+
+/* 드래그 오버레이 스타일 */
+.drag-overlay {
+  @apply bg-white rounded-lg opacity-95 pointer-events-none py-3 border-b border-gray-200 w-auto min-w-70 max-w-96 shadow-xl;
+  @apply z-50 cursor-grabbing;
+}
+
+/* 드래그 오버레이 내부 콘텐츠 */
+.drag-overlay .todo-item-content {
+  @apply flex items-center gap-3 px-3;
+}
+
+.drag-overlay .todo-item-checkbox {
+  @apply w-5 h-5 rounded border-2 border-gray-300 flex-shrink-0;
+}
+
+.drag-overlay .todo-item-text {
+  @apply flex-1 min-w-0;
+}
+
+/* 드래그 비활성화된 아이템 */
+.todo-item-disabled {
+  @apply cursor-not-allowed opacity-60;
+}
+
+/* 사분면 드래그 상태 */
+.todo-quadrant {
+  @apply transition-all duration-200;
+}
+
+/* 타겟 사분면 */
+.quadrant-target {
+  @apply border-2 border-dashed border-green-500 rounded-xl;
+  @apply bg-[linear-gradient(135deg,#e8f5e8,#f0f8f0)];
+}
+
+/* 비활성 사분면 */
+.quadrant-inactive {
+  @apply opacity-50 grayscale blur-sm;
+}
+
+/* 기본 드래그 핸들 커서 */
+.todo-item:not(.todo-item-disabled):not(.todo-item-dragging) {
+  @apply cursor-grab;
+}
+
+.todo-item:not(.todo-item-disabled):not(.todo-item-dragging):active {
+  @apply cursor-grabbing;
+}
+
+/* 드래그 핸들 영역 */
+.todo-item-drag-handle {
+  @apply cursor-grab flex-1 min-w-0;
+}
+
+.todo-item-drag-handle:active {
+  @apply cursor-grabbing;
+}
+
+/* 드래그 비활성화된 경우 */
+.todo-item-disabled .todo-item-drag-handle {
+  @apply cursor-not-allowed bg-transparent;
+}
+
+.todo-item-disabled .todo-item-drag-handle:hover {
+  @apply bg-transparent;
+}
+
+/* 드래그 중 선택 비활성화 */
+.todo-item-dragging,
+.todo-item-dragging * {
+  @apply select-none;
+}
+
+/* 드래그 중 페이지 안정화 */
+[data-dnd-context] {
+  @apply relative;
+}
+
+.quadrant-content {
+  @apply w-full h-full overflow-hidden relative;
+}
+
+.content {
+  @apply w-full relative flex-1 overflow-x-hidden overflow-y-auto min-h-0 max-h-full;
+}
+
+/* ========================================
+   📌 드롭 힌트 스타일
+======================================== */
+
+/* 드롭 힌트 컨테이너 */
+.drop-hint {
+  @apply py-4 flex flex-col items-center animate-pulse;
+}
+
+/* 드롭 힌트 점선 */
+.drop-hint-line {
+  @apply w-full h-0.5 rounded mb-2;
+  @apply bg-[repeating-linear-gradient(to_right,#4caf50_0px,#4caf50_8px,transparent_8px,transparent_16px)];
+}
+
+/* 드롭 힌트 텍스트 */
+.drop-hint-text {
+  @apply text-xs text-green-500 font-medium text-center py-1 px-3 rounded-xl border border-green-300 bg-green-50;
+}
