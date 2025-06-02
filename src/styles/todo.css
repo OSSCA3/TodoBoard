@@ -1,0 +1,445 @@
+.todo-page {
+  background-color: #f3effe;
+  color: #000000;
+  min-height: 100vh; /* 최소 화면 높이, 내용이 많으면 늘어남 */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  /* overflow 제거 - 자연스러운 페이지 스크롤 허용 */
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .todo-page {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .todo-page {
+    height: 100vh; /* 데스크톱에서는 화면 크기 고정 */
+    overflow-y: auto; /* 데스크톱에서도 페이지 스크롤 허용 */
+  }
+}
+
+.todo-container {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* overflow 제거 - 자연스러운 흐름 허용 */
+}
+
+.todo-main-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .todo-main-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Grid Layout */
+.todo-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  /* overflow 제거 - 그리드는 자연스럽게 늘어남 */
+  padding-bottom: 1rem;
+  grid-auto-rows: min-content;
+}
+
+@media (min-width: 1024px) {
+  .todo-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: 0;
+    grid-auto-rows: unset;
+    height: auto; /* 필요한 만큼 높이 사용 */
+  }
+}
+
+/* Quadrant Styles */
+.todo-quadrant {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  /* 모바일: 고정 높이 */
+  height: 300px;
+  min-height: 300px;
+  max-height: 300px;
+
+  /* 가로 오버플로우만 차단, 세로는 내부 스크롤 허용 */
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.todo-quadrant-header {
+  display: flex;
+  justify-content: space-between; /* 제목과 버튼을 양 끝으로 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin-bottom: 0.3rem; /* 하단 마진 추가 */
+  flex-shrink: 0; /* 헤더가 줄어들지 않도록 */
+}
+
+.todo-add-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem; /* 버튼 패딩 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.todo-add-button:hover {
+  background-color: #f0f0f0; /* 호버 효과 */
+}
+
+.todo-add-icon {
+  width: 1.5rem; /* 아이콘 크기 */
+  height: 1.5rem; /* 아이콘 크기 */
+  color: #6b7280; /* 아이콘 색상 */
+}
+
+@media (min-width: 768px) {
+  .todo-quadrant {
+    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+    /* 태블릿: 조금 더 큰 고정 높이 */
+    height: 320px;
+    min-height: 320px;
+    max-height: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .todo-quadrant {
+    padding: 0.25rem 1.5rem; /* 데스크톱 상하 패딩 더 줄임 */
+    /* 데스크톱: 그리드가 flex:1이므로 자동으로 맞춰짐 */
+    height: auto;
+    min-height: 250px;
+    max-height: none;
+  }
+}
+
+/* Typography */
+.todo-text {
+  color: #000000;
+}
+
+.todo-text-muted {
+  color: #6b7280;
+}
+
+.todo-text-completed {
+  color: #9ca3af;
+}
+
+.todo-title {
+  color: #000000;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.todo-section-title,
+.todo-section-count {
+  font-size: 0.75rem; /* Common font size */
+  line-height: 0.78; /* Common line height */
+}
+
+.todo-section-count {
+  font-weight: 500;
+  color: #6750a4;
+  margin-bottom: 0.1rem; /* User's specific adjustment */
+}
+
+/* Scrollable content area */
+.todo-content {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  min-height: 0;
+  max-height: 100%;
+}
+
+/* WebKit 기반 브라우저용 스크롤바 스타일 */
+.todo-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.todo-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.todo-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* 스크롤 컨테이너 내부 */
+.todo-scroll-inner {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 60px;
+  min-height: 0;
+}
+
+/* Item Styles */
+.todo-item {
+  background-color: transparent;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item:hover {
+  background-color: #f3f4f6; /* 이전보다 조금 더 진한 회색 */
+}
+
+.todo-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.todo-item-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  border: 2px solid #d1d5db;
+  accent-color: #6750a4;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.todo-item-checkbox:focus {
+  outline: 2px solid #6750a4;
+  outline-offset: 2px;
+}
+
+.todo-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-item-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.todo-item-date {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.todo-item-title-completed {
+  text-decoration: line-through;
+}
+
+/* Section spacing */
+.todo-section {
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.todo-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: #ffffff; /* 배경색 흰색으로 변경 */
+  color: #6750a4; /* 글자색 보라색으로 변경 */
+  padding: 0rem 0.55rem; /* Adjusted padding based on previous user edit */
+  border-radius: 4px;
+  display: inline-flex;
+  border: 1px solid #6750a4; /* 보라색 외곽선 추가 */
+}
+
+.todo-section-items {
+  margin-top: 0.5rem;
+}
+
+/* TodoList Styles */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+  flex-shrink: 1;
+}
+
+.todo-list-empty-message {
+  font-size: 0.875rem;
+}
+
+/* Menu Styles */
+.todo-menu-container {
+  position: relative;
+}
+
+.todo-menu-button {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.todo-menu-button:hover {
+  background-color: #f3f4f6; /* 이전보다 조금 더 진한 회색 */
+  color: #374151;
+}
+
+/* 3점 버튼 스타일 */
+.todo-menu-dots {
+  width: 4px;
+  height: 4px;
+  background-color: currentColor;
+  border-radius: 50%;
+  position: relative;
+}
+
+.todo-menu-dots::before,
+.todo-menu-dots::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: currentColor;
+  border-radius: 50%;
+  left: 0;
+}
+
+.todo-menu-dots::before {
+  top: -6px;
+}
+
+.todo-menu-dots::after {
+  top: 6px;
+}
+
+.todo-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  width: 3rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* 드롭다운이 화면 하단에 가까울 때 위로 표시 */
+.todo-menu-dropdown.dropdown-up {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.todo-menu-item {
+  width: 100%;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.todo-menu-item:hover {
+  background-color: #f3f4f6; /* 이전보다 조금 더 진한 회색 */
+}
+
+.todo-menu-item.delete {
+  color: #dc2626;
+}
+
+.todo-menu-item.delete:hover {
+  background-color: #f3f4f6; /* 이전보다 조금 더 진한 회색 */
+}
+
+.todo-menu-item svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.todo-menu-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Page Status Styles (Loading/Error) */
+.todo-status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.todo-status-message {
+  font-size: 1.25rem;
+}
+
+.todo-error-message-margin {
+  margin-top: 0.5rem;
+}
+
+.todo-retry-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.todo-retry-button:hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}
