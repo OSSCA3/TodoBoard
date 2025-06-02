@@ -10,14 +10,12 @@ interface TodoQuadrantProps {
 
 export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
   // store utility 메서드들 사용
-  const getQuadrantClass = useTodoStore((state) => state.getQuadrantClass);
   const createDropData = useTodoStore((state) => state.createDropData);
   const getQuadrantTodos = useTodoStore((state) => state.getQuadrantTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
 
   // store 메서드 사용으로 로직 단순화
   const dropData = createDropData(priority);
-  const quadrantClass = getQuadrantClass(priority);
   const todos = getQuadrantTodos(priority);
 
   // Droppable 설정
@@ -27,7 +25,7 @@ export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
   });
 
   return (
-    <div ref={setNodeRef} className={`todo-quadrant-content ${quadrantClass}`}>
+    <div ref={setNodeRef} className="todo-quadrant-content">
       <div className="todo-quadrant-header">
         <h2 className="todo-title">{title}</h2>
         <button onClick={() => addTodo(priority)} className="todo-add-button">

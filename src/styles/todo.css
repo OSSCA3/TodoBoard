@@ -553,12 +553,12 @@
 }
 
 /* 사분면 드래그 상태 */
-.todo-quadrant-content {
+.todo-quadrant {
   transition: all 0.2s ease;
 }
 
 /* 타겟 사분면 (드래그된 아이템이 도착할 곳) */
-.todo-quadrant-target {
+.todo-quadrant.todo-quadrant-target {
   background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
   border: 2px dashed #4caf50;
   border-radius: 12px;
@@ -566,7 +566,7 @@
 }
 
 /* 비활성 사분면 (드래그 중이지만 타겟이 아님) */
-.todo-quadrant-inactive {
+.todo-quadrant.todo-quadrant-inactive {
   opacity: 0.6;
   filter: grayscale(30%);
 }

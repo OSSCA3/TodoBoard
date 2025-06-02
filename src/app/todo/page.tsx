@@ -14,6 +14,7 @@ export default function TodoPage() {
   const handleDragOver = useTodoStore((state) => state.handleDragOver);
   const handleDragEnd = useTodoStore((state) => state.handleDragEnd);
   const handleDragCancel = useTodoStore((state) => state.handleDragCancel);
+  const getQuadrantClass = useTodoStore((state) => state.getQuadrantClass);
 
   useEffect(() => {
     useTodoStore.getState().fetchAllTodos();
@@ -69,22 +70,22 @@ export default function TodoPage() {
           <h1 className="todo-main-title">TODO</h1>
           <div className="todo-grid">
             {/* 중요한 일 */}
-            <div className="todo-quadrant">
+            <div className={`todo-quadrant ${getQuadrantClass('high')}`}>
               <TodoQuadrant title="중요한 일" priority="high" />
             </div>
 
             {/* 덜 중요한 일 */}
-            <div className="todo-quadrant">
+            <div className={`todo-quadrant ${getQuadrantClass('medium')}`}>
               <TodoQuadrant title="덜 중요한 일" priority="medium" />
             </div>
 
             {/* 안 중요한 일 */}
-            <div className="todo-quadrant">
+            <div className={`todo-quadrant ${getQuadrantClass('low')}`}>
               <TodoQuadrant title="안 중요한 일" priority="low" />
             </div>
 
             {/* 미뤄둔 일 */}
-            <div className="todo-quadrant">
+            <div className={`todo-quadrant ${getQuadrantClass('someday')}`}>
               <TodoQuadrant title="미뤄둔 일" priority="someday" />
             </div>
           </div>
