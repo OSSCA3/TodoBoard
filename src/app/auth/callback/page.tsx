@@ -9,12 +9,18 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const redirect = async () => {
-      const session = await getSessionClient();
+      try {
+        const session = await getSessionClient();
 
-      if (session?.user?.id) {
-        router.replace('/');
-      } else {
-        router.replace('/auth/login');
+        if (session?.user?.id) {
+          router.replace('/');
+        } else {
+          router.replace('/auth/login');
+        }
+      } catch (error) {
+        console.error('세션 확인 중 오류 발생:', error);
+        alert('세션 확인 중 오류가 발생했습니다.');
+        router.replace('/auth/login'); // fallback
       }
     };
 

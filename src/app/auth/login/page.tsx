@@ -21,9 +21,11 @@ export default function LoginPage() {
 
       if (error) {
         console.error('로그인 실패:', error.message);
+        alert('로그인에 실패했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
       console.error('로그인 중 오류 발생:', error);
+      alert('로그인 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
