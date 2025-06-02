@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { createClient } from '@/libs/supabase/client';
 import Button from '@/components/ui/buttons/button';
 
 export default function LoginPage() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -32,10 +32,17 @@ export default function LoginPage() {
         <Button
           variant="outline"
           onClick={handleLogin}
+          disabled={isLoading}
           className="w-full flex items-center justify-center gap-2"
         >
-          <img src="/images/Google.png" alt="Google logo" className="w-5 h-5" />
-          Google로 로그인
+          <img
+            src="/images/Google.png"
+            alt="Google logo"
+            className="w-5 h-5"
+            width={20}
+            height={20}
+          />
+          Google 계정으로 로그인
         </Button>
       </div>
     </main>
