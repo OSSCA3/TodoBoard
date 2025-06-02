@@ -537,13 +537,24 @@
    📌 DRAG & DROP 스타일
 ======================================== */
 
-/* 드래그 중인 아이템 */
+/* 드래그 중인 아이템 - 원래 위치에서는 완전히 숨김 */
 .todo-item-dragging {
-  opacity: 0.5;
-  transform: rotate(5deg);
-  z-index: 1000;
-  cursor: grabbing !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 드래그 오버레이 스타일 - 마우스를 따라다니는 프리뷰 */
+.todo-item-drag-overlay {
+  background-color: #ffffff;
+  border: 2px solid #6750a4;
+  border-radius: 8px;
+  padding: 0.8rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  z-index: 9999;
+  cursor: grabbing;
+  max-width: 300px;
+  pointer-events: none;
 }
 
 /* 드래그 비활성화된 아이템 */
