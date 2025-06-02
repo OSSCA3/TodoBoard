@@ -532,3 +532,59 @@
 .todo-retry-button:hover {
   background-color: #2563eb; /* Darker blue on hover */
 }
+
+/* ========================================
+   📌 DRAG & DROP 스타일
+======================================== */
+
+/* 드래그 중인 아이템 */
+.todo-item-dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+  cursor: grabbing !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 드래그 비활성화된 아이템 */
+.todo-item-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 사분면 드래그 상태 */
+.todo-quadrant-content {
+  transition: all 0.2s ease;
+}
+
+/* 타겟 사분면 (드래그된 아이템이 도착할 곳) */
+.todo-quadrant-target {
+  background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+  border: 2px dashed #4caf50;
+  border-radius: 12px;
+  transform: scale(1.02);
+}
+
+/* 비활성 사분면 (드래그 중이지만 타겟이 아님) */
+.todo-quadrant-inactive {
+  opacity: 0.6;
+  filter: grayscale(30%);
+}
+
+/* 기본 드래그 핸들 커서 */
+.todo-item:not(.todo-item-disabled):not(.todo-item-dragging) {
+  cursor: grab;
+}
+
+.todo-item:not(.todo-item-disabled):not(.todo-item-dragging):active {
+  cursor: grabbing;
+}
+
+/* 드래그 중 선택 비활성화 */
+.todo-item-dragging,
+.todo-item-dragging * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

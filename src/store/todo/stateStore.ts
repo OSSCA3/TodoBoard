@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Todo } from '@/types/todo';
 import { createInitialProcessedTodos } from '@/utils/todoProcessor';
 import { ProcessedTodos } from './typeStore';
+import { DragState } from '@/types/dnd';
 
 // 순수 상태 관리 타입
 interface TodoStateStore {
@@ -11,11 +12,15 @@ interface TodoStateStore {
   error: Error | null;
   processedTodos: ProcessedTodos;
 
+  // 드래그 상태
+  dragState: DragState;
+
   // 순수 setter들
   setTodos: (todos: Todo[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: Error | null) => void;
   setProcessedTodos: (processedTodos: ProcessedTodos) => void;
+  setDragState: (dragState: Partial<DragState>) => void;
 }
 
 export const useTodoStateStore = create<TodoStateStore>((set) => ({
@@ -24,10 +29,19 @@ export const useTodoStateStore = create<TodoStateStore>((set) => ({
   isLoading: false,
   error: null,
   processedTodos: createInitialProcessedTodos(),
+  dragState: {
+    isDragging: false,
+    draggedTodoId: null,
+    targetPriority: null,
+  },
 
   // 순수 setter들
   setTodos: (todos) => set({ todos }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
   setProcessedTodos: (processedTodos) => set({ processedTodos }),
+  setDragState: (newDragState) =>
+    set((state) => ({
+      dragState: { ...state.dragState, ...newDragState },
+    })),
 }));
