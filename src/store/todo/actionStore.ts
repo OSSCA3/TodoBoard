@@ -1,5 +1,7 @@
 import { create } from 'zustand';
+import { DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { PriorityType } from '@/types/todo';
+import { DragData, DropData } from '@/types/dnd';
 import {
   fetchAllTodosFromApi,
   updateTodoCompletionFromApi,
@@ -7,20 +9,29 @@ import {
 import { processAllTodos } from '@/utils/todoProcessor';
 import { useTodoStateStore } from './stateStore';
 
-// 비즈니스 로직 타입
-interface TodoActionStore {
-  // 비즈니스 액션들
-  fetchAllTodos: () => Promise<void>;
-  toggleTodoComplete: (id: number) => Promise<void>;
-  addTodo: (priority: PriorityType) => void;
-  editTodo: (id: number) => void;
-  deleteTodo: (id: number) => void;
+// typeStore에서 정의된 TodoState의 액션 부분만 추출
+type TodoActionMethods = Pick<
+  import('./typeStore').TodoState,
+  | 'fetchAllTodos'
+  | 'toggleTodoComplete'
+  | 'addTodo'
+  | 'editTodo'
+  | 'deleteTodo'
+  | 'moveTodo'
+  | 'handleDragStart'
+  | 'handleDragOver'
+  | 'handleDragEnd'
+  | 'handleDragCancel'
+  | 'isDragDisabled'
+  | 'isBeingDragged'
+  | 'getTodoItemClass'
+  | 'createDragData'
+  | 'getQuadrantClass'
+  | 'createDropData'
+  | 'getQuadrantTodos'
+>;
 
-  // 드래그 앤 드롭 액션
-  moveTodo: (todoId: number, newPriority: PriorityType) => Promise<void>;
-}
-
-export const useTodoActionStore = create<TodoActionStore>(() => ({
+export const useTodoActionStore = create<TodoActionMethods>(() => ({
   fetchAllTodos: async () => {
     const stateStore = useTodoStateStore.getState();
 
@@ -153,5 +164,129 @@ export const useTodoActionStore = create<TodoActionStore>(() => ({
       // TODO: 더 나은 에러 UI 필요 (토스트/스낵바)
       alert('할 일 이동에 실패했습니다. 다시 시도해주세요.');
     }
+  },
+
+  // 드래그 앤 드롭 핸들러들
+  handleDragStart: (event: DragStartEvent) => {
+    const dragData = event.active.data.current as DragData;
+    if (dragData) {
+      const stateStore = useTodoStateStore.getState();
+      stateStore.setDragState({
+        isDragging: true,
+        draggedTodoId: dragData.id,
+        targetPriority: dragData.currentPriority,
+      });
+    }
+  },
+
+  handleDragOver: (event: DragOverEvent) => {
+    const { over } = event;
+    if (over) {
+      const dropData = over.data.current as DropData;
+      if (dropData) {
+        const stateStore = useTodoStateStore.getState();
+        stateStore.setDragState({
+          targetPriority: dropData.priority,
+        });
+      }
+    }
+  },
+
+  handleDragEnd: async (event: DragEndEvent) => {
+    const { active, over } = event;
+    const stateStore = useTodoStateStore.getState();
+
+    // 드래그 상태 초기화
+    stateStore.setDragState({
+      isDragging: false,
+      draggedTodoId: null,
+      targetPriority: null,
+    });
+
+    if (!over) return;
+
+    const dragData = active.data.current as DragData;
+    const dropData = over.data.current as DropData;
+
+    if (dragData && dropData) {
+      // 다른 우선순위로 이동한 경우에만 실행
+      if (dragData.currentPriority !== dropData.priority) {
+        // 기존 moveTodo 재사용 (id는 number로 변환)
+        await useTodoActionStore
+          .getState()
+          .moveTodo(Number(dragData.id), dropData.priority);
+      }
+    }
+  },
+
+  handleDragCancel: () => {
+    const stateStore = useTodoStateStore.getState();
+    stateStore.setDragState({
+      isDragging: false,
+      draggedTodoId: null,
+      targetPriority: null,
+    });
+  },
+
+  // 드래그 관련 Utility 메서드들
+  isDragDisabled: (todoId: number) => {
+    const stateStore = useTodoStateStore.getState();
+    // 로딩 중일 때 드래그 비활성화
+    return stateStore.isLoading;
+  },
+
+  isBeingDragged: (todoId: number) => {
+    const stateStore = useTodoStateStore.getState();
+    return stateStore.dragState.draggedTodoId === todoId;
+  },
+
+  getTodoItemClass: (todoId: number) => {
+    const stateStore = useTodoStateStore.getState();
+    const actionStore = useTodoActionStore.getState();
+
+    let baseClass = 'todo-item';
+
+    if (actionStore.isDragDisabled(todoId)) {
+      baseClass += ' todo-item-disabled';
+    }
+
+    if (actionStore.isBeingDragged(todoId)) {
+      baseClass += ' todo-item-dragging';
+    }
+
+    return baseClass;
+  },
+
+  createDragData: (todo) => {
+    return {
+      id: todo.id,
+      currentPriority: todo.priority,
+      todo: todo,
+    };
+  },
+
+  // Quadrant 관련 Utility 메서드들
+  getQuadrantClass: (priority) => {
+    const stateStore = useTodoStateStore.getState();
+
+    if (!stateStore.dragState.isDragging) return '';
+
+    // 타겟 사분면 (드래그된 아이템이 도착할 곳)
+    if (stateStore.dragState.targetPriority === priority) {
+      return 'todo-quadrant-target';
+    }
+
+    // 비활성 사분면 (드래그 중이지만 타겟이 아님)
+    return 'todo-quadrant-inactive';
+  },
+
+  createDropData: (priority) => {
+    return { priority };
+  },
+
+  getQuadrantTodos: (priority) => {
+    const stateStore = useTodoStateStore.getState();
+    const priorityData = stateStore.processedTodos[priority];
+    return [...priorityData.incomplete, ...priorityData.completed];
   },
 }));

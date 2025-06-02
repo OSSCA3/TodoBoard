@@ -1,5 +1,6 @@
 import { Todo, PriorityType } from '@/types/todo';
-import { DragState } from '@/types/dnd';
+import { DragState, DragData, DropData } from '@/types/dnd';
+import { DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 
 // 처리된 데이터 타입
 export interface ProcessedTodos {
@@ -36,4 +37,21 @@ export interface TodoState {
   editTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
   moveTodo: (todoId: number, newPriority: PriorityType) => Promise<void>;
+
+  // 드래그 앤 드롭 핸들러들
+  handleDragStart: (event: DragStartEvent) => void;
+  handleDragOver: (event: DragOverEvent) => void;
+  handleDragEnd: (event: DragEndEvent) => Promise<void>;
+  handleDragCancel: () => void;
+
+  // 드래그 관련 Utility 메서드들 (TodoItem용)
+  isDragDisabled: (todoId: number) => boolean;
+  isBeingDragged: (todoId: number) => boolean;
+  getTodoItemClass: (todoId: number) => string;
+  createDragData: (todo: Todo) => DragData;
+
+  // 드래그 관련 Utility 메서드들 (TodoQuadrant용)
+  getQuadrantClass: (priority: PriorityType) => string;
+  createDropData: (priority: PriorityType) => DropData;
+  getQuadrantTodos: (priority: PriorityType) => Todo[];
 }

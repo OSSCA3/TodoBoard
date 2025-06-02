@@ -1,7 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
-import { Todo, PriorityType } from '@/types/todo';
+import { PriorityType } from '@/types/todo';
 import { useTodoStore } from '@/store/todo/todoStore';
-import { DropData } from '@/types/dnd';
 import TodoList from './TodoList';
 
 interface TodoQuadrantProps {
@@ -10,42 +9,28 @@ interface TodoQuadrantProps {
 }
 
 export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
-  // store에서 해당 priority의 데이터 직접 가져오기 (완료/미완료 합쳐서)
-  const priorityData = useTodoStore((state) => state.processedTodos[priority]);
-  const todos = [...priorityData.incomplete, ...priorityData.completed];
-  const dragState = useTodoStore((state) => state.dragState);
+  // store utility 메서드들 사용
+  const getQuadrantClass = useTodoStore((state) => state.getQuadrantClass);
+  const createDropData = useTodoStore((state) => state.createDropData);
+  const getQuadrantTodos = useTodoStore((state) => state.getQuadrantTodos);
+  const addTodo = useTodoStore((state) => state.addTodo);
+
+  // store 메서드 사용으로 로직 단순화
+  const dropData = createDropData(priority);
+  const quadrantClass = getQuadrantClass(priority);
+  const todos = getQuadrantTodos(priority);
 
   // Droppable 설정
-  const dropData: DropData = { priority };
   const { isOver, setNodeRef } = useDroppable({
     id: `quadrant-${priority}`,
     data: dropData,
   });
 
-  // 드래그 상태에 따른 스타일 클래스 결정
-  const getQuadrantClass = () => {
-    if (!dragState.isDragging) return '';
-
-    // 타겟 사분면 (드래그된 아이템이 도착할 곳)
-    if (dragState.targetPriority === priority) {
-      return 'todo-quadrant-target';
-    }
-
-    // 비활성 사분면 (드래그 중이지만 타겟이 아님)
-    return 'todo-quadrant-inactive';
-  };
-
   return (
-    <div
-      ref={setNodeRef}
-      className={`todo-quadrant-content ${getQuadrantClass()}`}
-    >
+    <div ref={setNodeRef} className={`todo-quadrant-content ${quadrantClass}`}>
       <div className="todo-quadrant-header">
         <h2 className="todo-title">{title}</h2>
-        <button
-          onClick={() => useTodoStore.getState().addTodo(priority)}
-          className="todo-add-button"
-        >
+        <button onClick={() => addTodo(priority)} className="todo-add-button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

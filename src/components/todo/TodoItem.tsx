@@ -2,7 +2,6 @@ import { useDraggable } from '@dnd-kit/core';
 import { Todo } from '@/types/todo';
 import { formatDate } from '@/utils/todoFormatter';
 import { useTodoStore } from '@/store/todo/todoStore';
-import { DragData } from '@/types/dnd';
 import TodoMenu from './TodoMenu';
 
 interface TodoItemProps {
@@ -18,30 +17,25 @@ export default function TodoItem({
   onMenuToggle,
   onMenuClose,
 }: TodoItemProps) {
-  // store 액션 가져오기
+  // store 액션 및 utility 메서드 가져오기
   const toggleTodoComplete = useTodoStore((state) => state.toggleTodoComplete);
-  const dragState = useTodoStore((state) => state.dragState);
-  const isLoading = useTodoStore((state) => state.isLoading);
+  const isDragDisabled = useTodoStore((state) => state.isDragDisabled);
+  const isBeingDragged = useTodoStore((state) => state.isBeingDragged);
+  const getTodoItemClass = useTodoStore((state) => state.getTodoItemClass);
+  const createDragData = useTodoStore((state) => state.createDragData);
 
-  // 드래그 가능 여부 판단 (완료된 Todo는 가능, 로딩 중은 불가)
-  const isDragDisabled = isLoading;
-
-  // Draggable 설정
-  const dragData: DragData = {
-    id: todo.id,
-    currentPriority: todo.priority,
-    todo: todo,
-  };
+  // store 메서드 사용으로 로직 단순화
+  const dragData = createDragData(todo);
+  const itemClass = getTodoItemClass(todo.id);
+  const disabled = isDragDisabled(todo.id);
+  const beingDragged = isBeingDragged(todo.id);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: `todo-${todo.id}`,
       data: dragData,
-      disabled: isDragDisabled,
+      disabled: disabled,
     });
-
-  // 드래그 중인 아이템인지 확인
-  const isBeingDragged = dragState.draggedTodoId === todo.id;
 
   // 드래그 변환 스타일
   const style = transform
@@ -50,26 +44,11 @@ export default function TodoItem({
       }
     : undefined;
 
-  // 드래그 상태에 따른 클래스 결정
-  const getItemClass = () => {
-    let baseClass = 'todo-item';
-
-    if (isDragDisabled) {
-      baseClass += ' todo-item-disabled';
-    }
-
-    if (isBeingDragged) {
-      baseClass += ' todo-item-dragging';
-    }
-
-    return baseClass;
-  };
-
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={getItemClass()}
+      className={itemClass}
       {...listeners}
       {...attributes}
     >
@@ -115,7 +94,7 @@ export default function TodoItem({
         </div>
 
         {/* 우측: 메뉴 (드래그 중일 때는 숨김) */}
-        {!isBeingDragged && (
+        {!beingDragged && (
           <TodoMenu
             todoId={todo.id}
             isOpen={isMenuOpen}

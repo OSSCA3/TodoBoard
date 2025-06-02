@@ -1,87 +1,23 @@
 'use client'; // 클라이언트 컴포넌트로 전환 (useEffect, useState, Zustand 사용을 위해)
 
 import React, { useEffect } from 'react';
-import {
-  DndContext,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverEvent,
-} from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import TodoQuadrant from '@/components/todo/TodoQuadrant';
 import { useTodoStore } from '@/store/todo/todoStore';
-import { DragData, DropData } from '@/types/dnd';
-import { PriorityType } from '@/types/todo';
 import '@/styles/todo.css';
 
 export default function TodoPage() {
-  // 로딩과 에러 상태만 필요
+  // 필요한 상태와 핸들러들
   const isLoading = useTodoStore((state) => state.isLoading);
   const error = useTodoStore((state) => state.error);
-  const dragState = useTodoStore((state) => state.dragState);
-  const setDragState = useTodoStore((state) => state.setDragState);
-  const moveTodo = useTodoStore((state) => state.moveTodo);
+  const handleDragStart = useTodoStore((state) => state.handleDragStart);
+  const handleDragOver = useTodoStore((state) => state.handleDragOver);
+  const handleDragEnd = useTodoStore((state) => state.handleDragEnd);
+  const handleDragCancel = useTodoStore((state) => state.handleDragCancel);
 
   useEffect(() => {
     useTodoStore.getState().fetchAllTodos();
   }, []);
-
-  // 드래그 시작 핸들러
-  const handleDragStart = (event: DragStartEvent) => {
-    const dragData = event.active.data.current as DragData;
-    if (dragData) {
-      setDragState({
-        isDragging: true,
-        draggedTodoId: dragData.id,
-        targetPriority: dragData.currentPriority,
-      });
-    }
-  };
-
-  // 드래그 오버 핸들러 (다른 사분면 위에 있을 때)
-  const handleDragOver = (event: DragOverEvent) => {
-    const { over } = event;
-    if (over) {
-      const dropData = over.data.current as DropData;
-      if (dropData) {
-        setDragState({
-          targetPriority: dropData.priority,
-        });
-      }
-    }
-  };
-
-  // 드래그 종료 핸들러
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    // 드래그 상태 초기화
-    setDragState({
-      isDragging: false,
-      draggedTodoId: null,
-      targetPriority: null,
-    });
-
-    if (!over) return;
-
-    const dragData = active.data.current as DragData;
-    const dropData = over.data.current as DropData;
-
-    if (dragData && dropData) {
-      // 다른 우선순위로 이동한 경우에만 실행
-      if (dragData.currentPriority !== dropData.priority) {
-        await moveTodo(dragData.id, dropData.priority);
-      }
-    }
-  };
-
-  // 드래그 취소 핸들러 (ESC 키)
-  const handleDragCancel = () => {
-    setDragState({
-      isDragging: false,
-      draggedTodoId: null,
-      targetPriority: null,
-    });
-  };
 
   // 로딩 중 UI
   if (isLoading) {
