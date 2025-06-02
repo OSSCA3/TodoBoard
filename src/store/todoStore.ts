@@ -104,6 +104,11 @@ interface TodoState {
   fetchAllTodos: () => Promise<void>;
   addTodo: (priority: PriorityType) => void;
 
+  // Todo 아이템 액션
+  toggleTodoComplete: (id: number) => void;
+  editTodo: (id: number) => void;
+  deleteTodo: (id: number) => void;
+
   // 메뉴 액션
   setOpenMenuId: (id: number | null) => void;
   toggleMenu: (id: number) => void;
@@ -158,5 +163,33 @@ export const useTodoStore = create<TodoState>((set, get) => ({
   },
   closeMenu: () => {
     set({ openMenuId: null });
+  },
+  // Todo 아이템 액션
+  toggleTodoComplete: (id: number) => {
+    const state = get();
+    const updatedTodos = state.todos.map((todo) =>
+      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo,
+    );
+
+    // 원본 데이터 업데이트 및 재처리
+    const processedData = processAllTodos(updatedTodos);
+    set({
+      todos: updatedTodos,
+      processedTodos: processedData,
+    });
+
+    // TODO: 나중에 서버 업데이트 로직 추가 예정
+  },
+  editTodo: (id: number) => {
+    console.log('편집:', id);
+    // 메뉴 닫기
+    set({ openMenuId: null });
+    // TODO: 나중에 편집 모달/폼 구현 예정
+  },
+  deleteTodo: (id: number) => {
+    console.log('삭제:', id);
+    // 메뉴 닫기
+    set({ openMenuId: null });
+    // TODO: 나중에 삭제 확인 및 실행 구현 예정
   },
 }));

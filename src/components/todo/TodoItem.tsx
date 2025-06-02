@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Todo } from '@/types/todo';
-import { formatDate } from '@/store/todoStore';
+import { formatDate, useTodoStore } from '@/store/todoStore';
 
 interface TodoItemProps {
   todo: Todo;
@@ -15,8 +15,11 @@ export default function TodoItem({
   onMenuToggle,
   onMenuClose,
 }: TodoItemProps) {
-  // 로컬 상태로 완료 여부 관리
-  const [isCompleted, setIsCompleted] = useState(todo.isCompleted);
+  // store 액션들 가져오기
+  const toggleTodoComplete = useTodoStore((state) => state.toggleTodoComplete);
+  const editTodo = useTodoStore((state) => state.editTodo);
+  const deleteTodo = useTodoStore((state) => state.deleteTodo);
+
   const [dropdownUp, setDropdownUp] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -53,35 +56,14 @@ export default function TodoItem({
     }
   }, [isMenuOpen]);
 
-  const handleToggleComplete = () => {
-    setIsCompleted(!isCompleted);
-    // 나중에 서버 업데이트 로직 추가 예정
-  };
-
-  const handleMenuClick = () => {
-    onMenuToggle();
-  };
-
-  const handleEdit = () => {
-    console.log('편집:', todo.id);
-    onMenuClose();
-    // 나중에 편집 모달/폼 구현 예정
-  };
-
-  const handleDelete = () => {
-    console.log('삭제:', todo.id);
-    onMenuClose();
-    // 나중에 삭제 확인 및 실행 구현 예정
-  };
-
   return (
     <div className="todo-item">
       <div className="todo-item-content">
         {/* 좌측: 체크박스 */}
         <input
           type="checkbox"
-          checked={isCompleted}
-          onChange={handleToggleComplete}
+          checked={todo.isCompleted}
+          onChange={() => toggleTodoComplete(todo.id)}
           className="todo-item-checkbox"
         />
 
@@ -90,7 +72,7 @@ export default function TodoItem({
           {/* 상단: 제목 */}
           <div
             className={`todo-item-title ${
-              isCompleted
+              todo.isCompleted
                 ? 'todo-text-completed todo-item-title-completed'
                 : 'todo-text'
             }`}
@@ -102,7 +84,7 @@ export default function TodoItem({
           {todo.dueDate && (
             <div
               className={`todo-item-date ${
-                isCompleted ? 'todo-text-completed' : 'todo-text-muted'
+                todo.isCompleted ? 'todo-text-completed' : 'todo-text-muted'
               }`}
             >
               {formatDate(todo.dueDate)}
@@ -112,7 +94,7 @@ export default function TodoItem({
 
         {/* 우측: 3점 메뉴 버튼 */}
         <div className="todo-menu-container" ref={menuRef}>
-          <button onClick={handleMenuClick} className="todo-menu-button">
+          <button onClick={onMenuToggle} className="todo-menu-button">
             <div className="todo-menu-dots"></div>
           </button>
 
@@ -121,7 +103,10 @@ export default function TodoItem({
             <div
               className={`todo-menu-dropdown ${dropdownUp ? 'dropdown-up' : ''}`}
             >
-              <button onClick={handleEdit} className="todo-menu-item">
+              <button
+                onClick={() => editTodo(todo.id)}
+                className="todo-menu-item"
+              >
                 <svg
                   className="todo-menu-icon"
                   fill="none"
@@ -136,7 +121,10 @@ export default function TodoItem({
                   />
                 </svg>
               </button>
-              <button onClick={handleDelete} className="todo-menu-item delete">
+              <button
+                onClick={() => deleteTodo(todo.id)}
+                className="todo-menu-item delete"
+              >
                 <svg
                   className="todo-menu-icon"
                   fill="none"
