@@ -19,12 +19,14 @@ export default function TodoPage() {
   if (isLoading) {
     return (
       <div className="todo-page">
-        <div className="todo-container">
-          <div className="todo-status-container">
-            <p className="todo-text todo-status-message">
-              데이터를 불러오는 중입니다...
-            </p>
+        <div className="todo-loading">
+          <div className="loading-spinner"></div>
+          <div className="loading-dots">
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
           </div>
+          <p className="todo-text">데이터를 불러오는 중입니다...</p>
         </div>
       </div>
     );
@@ -34,24 +36,18 @@ export default function TodoPage() {
   if (error) {
     return (
       <div className="todo-page">
-        <div className="todo-container">
-          <div
-            className="todo-status-container"
-            style={{ flexDirection: 'column' }}
+        <div className="todo-error">
+          <div className="todo-error-icon">⚠️</div>
+          <p className="todo-text todo-status-message">
+            데이터를 불러오는 데 실패했습니다.
+          </p>
+          <p className="todo-text-muted">에러: {error.message}</p>
+          <button
+            onClick={() => useTodoStore.getState().fetchAllTodos()}
+            className="todo-retry-button"
           >
-            <p className="todo-text todo-status-message">
-              데이터를 불러오는 데 실패했습니다.
-            </p>
-            <p className="todo-text-muted todo-error-message-margin">
-              에러: {error.message}
-            </p>
-            <button
-              onClick={() => useTodoStore.getState().fetchAllTodos()}
-              className="todo-retry-button"
-            >
-              다시 시도
-            </button>
-          </div>
+            🔄 다시 시도
+          </button>
         </div>
       </div>
     );

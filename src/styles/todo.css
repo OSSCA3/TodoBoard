@@ -415,6 +415,83 @@
 }
 
 /* Page Status Styles (Loading/Error) */
+.todo-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 전체 화면 높이로 변경 */
+  gap: 2rem; /* 간격 증가 */
+}
+
+.todo-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 전체 화면 높이로 변경 */
+  gap: 1.5rem; /* 간격 증가 */
+}
+
+.todo-error-icon {
+  font-size: 5rem;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 4rem; /* 2rem → 4rem */
+  height: 4rem; /* 2rem → 4rem */
+  border: 4px solid #e5e7eb; /* 3px → 4px */
+  border-top: 4px solid #6750a4; /* 3px → 4px */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 0.5rem; /* 0.25rem → 0.5rem */
+}
+
+.loading-dot {
+  width: 0.8rem; /* 0.5rem → 0.8rem */
+  height: 0.8rem; /* 0.5rem → 0.8rem */
+  background-color: #6750a4;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.loading-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.loading-dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .todo-status-container {
   display: flex;
   justify-content: center;
@@ -423,7 +500,13 @@
 }
 
 .todo-status-message {
-  font-size: 1.25rem;
+  font-size: 1.5rem; /* 1.25rem → 1.5rem */
+  font-weight: 500; /* 추가: 약간 더 두껍게 */
+}
+
+.todo-loading p {
+  font-size: 1.25rem; /* 로딩 텍스트 크기 증가 */
+  font-weight: 500; /* 추가: 약간 더 두껍게 */
 }
 
 .todo-error-message-margin {
@@ -432,12 +515,15 @@
 
 .todo-retry-button {
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem; /* 0.5rem 1rem → 0.75rem 1.5rem */
   background-color: #3b82f6;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px; /* 6px → 8px */
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 1.1rem; /* 추가: 버튼 텍스트 크기 증가 */
+  font-weight: 500; /* 추가: 약간 더 두껍게 */
 }
 
 .todo-retry-button:hover {
