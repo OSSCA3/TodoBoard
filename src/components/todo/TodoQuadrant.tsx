@@ -1,17 +1,15 @@
 import { Todo, PriorityType } from '@/types/todo';
+import { useTodoStore } from '@/store/todoStore';
 import TodoList from './TodoList';
 
 interface TodoQuadrantProps {
   title: string; // 페이지에서 한글 제목을 받음
-  todos: Todo[]; // 페이지에서 필터링된 할 일 목록을 받음
   priority: PriorityType; // 현재 사분면의 우선순위
 }
 
-export default function TodoQuadrant({
-  title,
-  todos,
-  priority,
-}: TodoQuadrantProps) {
+export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
+  // store에서 해당 priority의 데이터 직접 가져오기
+  const todos = useTodoStore((state) => state.processedTodos[priority]);
   // 더 이상 목업 데이터나 자체적인 API 호출 로직이 필요 없음
   // 모든 데이터는 props를 통해 TodoPage로부터 전달받음
 

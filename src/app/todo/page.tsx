@@ -6,10 +6,9 @@ import { useTodoStore } from '@/store/todoStore';
 import '@/styles/todo.css';
 
 export default function TodoPage() {
-  // 개별적으로 상태를 가져와서 안정성 확보
+  // 로딩과 에러 상태만 필요
   const isLoading = useTodoStore((state) => state.isLoading);
   const error = useTodoStore((state) => state.error);
-  const processedTodos = useTodoStore((state) => state.processedTodos);
 
   useEffect(() => {
     useTodoStore.getState().fetchAllTodos();
@@ -60,38 +59,22 @@ export default function TodoPage() {
         <div className="todo-grid">
           {/* 중요한 일 */}
           <div className="todo-quadrant">
-            <TodoQuadrant
-              title="중요한 일"
-              todos={processedTodos.high}
-              priority="high"
-            />
+            <TodoQuadrant title="중요한 일" priority="high" />
           </div>
 
           {/* 덜 중요한 일 */}
           <div className="todo-quadrant">
-            <TodoQuadrant
-              title="덜 중요한 일"
-              todos={processedTodos.medium}
-              priority="medium"
-            />
+            <TodoQuadrant title="덜 중요한 일" priority="medium" />
           </div>
 
           {/* 안 중요한 일 */}
           <div className="todo-quadrant">
-            <TodoQuadrant
-              title="안 중요한 일"
-              todos={processedTodos.low}
-              priority="low"
-            />
+            <TodoQuadrant title="안 중요한 일" priority="low" />
           </div>
 
           {/* 미뤄둔 일 */}
           <div className="todo-quadrant">
-            <TodoQuadrant
-              title="미뤄둔 일"
-              todos={processedTodos.someday}
-              priority="someday"
-            />
+            <TodoQuadrant title="미뤄둔 일" priority="someday" />
           </div>
         </div>
       </div>
