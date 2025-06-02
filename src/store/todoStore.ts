@@ -64,6 +64,7 @@ interface TodoState {
 
   // 액션
   fetchAllTodos: () => Promise<void>;
+  addTodo: (priority: PriorityType) => void;
 }
 
 // ===== 3. 스토어 생성 =====
@@ -99,5 +100,12 @@ export const useTodoStore = create<TodoState>((set, get) => ({
       });
       console.error('Error fetching todos in store:', err);
     }
+  },
+  addTodo: (priority: PriorityType) => {
+    console.log('할 일 추가 버튼 클릭!', priority);
+    // TODO: 나중에 할 일 추가 모달/폼 구현 예정
+    // 1. 새로운 todo 객체 생성
+    // 2. API 호출하여 서버에 저장
+    // 3. 성공 시 로컬 상태 업데이트 및 재정렬
   },
 }));
