@@ -8,6 +8,11 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { persistSession: false },
 });
 
+/**
+ * Retrieves all todo items from the database, ordered by priority and order.
+ *
+ * @returns A JSON response containing the list of todos, or an error message if retrieval fails.
+ */
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('todo')
@@ -26,6 +31,12 @@ export async function GET() {
   return NextResponse.json({ todos: data });
 }
 
+/**
+ * Updates a todo item with the specified ID using data from the request body.
+ *
+ * @param request - The HTTP request containing the todo ID in the query string and update data in the JSON body.
+ * @returns A JSON response with the updated todo item, or an error message with the appropriate HTTP status code if the update fails or the ID is missing.
+ */
 export async function PATCH(request: Request) {
   const url = new URL(request.url);
   const id = url.searchParams.get('id');
