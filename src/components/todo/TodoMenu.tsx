@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useTodoStore } from '@/store/todoStore';
+import { useTodoStore } from '@/store/todo/todoStore';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDropdownPosition } from '@/hooks/useDropdownPosition';
 

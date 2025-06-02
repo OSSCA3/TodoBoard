@@ -1,5 +1,5 @@
 import { Todo, PriorityType } from '@/types/todo';
-import { useTodoStore } from '@/store/todoStore';
+import { useTodoStore } from '@/store/todo/todoStore';
 import TodoList from './TodoList';
 
 interface TodoQuadrantProps {

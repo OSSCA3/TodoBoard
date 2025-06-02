@@ -1,6 +1,6 @@
 import { Todo } from '@/types/todo';
 import { formatDate } from '@/utils/todoFormatter';
-import { useTodoStore } from '@/store/todoStore';
+import { useTodoStore } from '@/store/todo/todoStore';
 import TodoMenu from './TodoMenu';
 
 interface TodoItemProps {

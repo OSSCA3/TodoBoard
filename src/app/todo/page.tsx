@@ -1,8 +1,8 @@
 'use client'; // 클라이언트 컴포넌트로 전환 (useEffect, useState, Zustand 사용을 위해)
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import TodoQuadrant from '@/components/todo/TodoQuadrant';
-import { useTodoStore } from '@/store/todoStore';
+import { useTodoStore } from '@/store/todo/todoStore';
 import '@/styles/todo.css';
 
 export default function TodoPage() {
