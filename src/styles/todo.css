@@ -44,12 +44,12 @@
 
 /* Quadrant Styles */
 .todo-quadrant {
-  @apply bg-white rounded-lg px-4 py-3 flex flex-col overflow-x-hidden overflow-y-visible shadow-xl;
+  @apply bg-white rounded-lg px-4 py-3 flex flex-col overflow-x-hidden overflow-y-visible shadow-md;
   @apply h-75 min-h-75 max-h-75;
 }
 
 .todo-quadrant-header {
-  @apply flex justify-between items-center mb-1 flex-shrink-0;
+  @apply flex justify-between items-center mb-4 mt-4 flex-shrink-0;
 }
 
 .todo-add-button {
@@ -90,16 +90,12 @@
 }
 
 .todo-title {
-  @apply text-black font-bold text-2xl mb-4 pb-2 flex-shrink-0;
+  @apply text-black font-bold text-2xl flex-shrink-0;
 }
 
 .todo-section-title,
 .todo-section-count {
-  @apply text-xs leading-[0.78];
-}
-
-.todo-section-count {
-  @apply font-medium text-violet-600 mb-0.5;
+  @apply text-[13px] leading-[0.78] font-medium;
 }
 
 /* Scrollable content area */
@@ -168,7 +164,7 @@
 }
 
 .todo-section-header {
-  @apply flex items-center gap-1 bg-white text-violet-600 py-0 px-2 rounded inline-flex border border-violet-600;
+  @apply items-center gap-1 bg-white text-violet-600 py-3 px-4 rounded inline-flex border border-violet-600 text-sm font-medium;
 }
 
 .todo-section-items {
@@ -241,10 +237,6 @@
   @apply bg-gray-100;
 }
 
-.todo-menu-item svg {
-  @apply w-5 h-5;
-}
-
 .todo-menu-icon {
   @apply w-5 h-5;
 }
@@ -285,20 +277,12 @@
   @apply delay-[0ms];
 }
 
-.todo-status-container {
-  @apply flex justify-center items-center h-96;
-}
-
 .todo-status-message {
   @apply text-2xl font-medium;
 }
 
 .todo-loading p {
   @apply text-xl font-medium;
-}
-
-.todo-error-message-margin {
-  @apply mt-2;
 }
 
 .todo-retry-button {
