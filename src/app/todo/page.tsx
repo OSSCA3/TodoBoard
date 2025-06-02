@@ -6,14 +6,13 @@ import { useTodoStore } from '@/store/todoStore';
 import '@/styles/todo.css';
 
 export default function TodoPage() {
-  // 개별적으로 상태를 가져와서 selector 안정성 확보
-  const todos = useTodoStore((state) => state.todos);
+  // 개별적으로 상태를 가져와서 안정성 확보
   const isLoading = useTodoStore((state) => state.isLoading);
   const error = useTodoStore((state) => state.error);
-  const fetchAllTodos = useTodoStore((state) => state.fetchAllTodos);
+  const processedTodos = useTodoStore((state) => state.processedTodos);
 
   useEffect(() => {
-    fetchAllTodos();
+    useTodoStore.getState().fetchAllTodos();
   }, []);
 
   // 로딩 중 UI
@@ -21,15 +20,8 @@ export default function TodoPage() {
     return (
       <div className="todo-page">
         <div className="todo-container">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '50vh',
-            }}
-          >
-            <p className="todo-text" style={{ fontSize: '1.25rem' }}>
+          <div className="todo-status-container">
+            <p className="todo-text todo-status-message">
               데이터를 불러오는 중입니다...
             </p>
           </div>
@@ -44,31 +36,18 @@ export default function TodoPage() {
       <div className="todo-page">
         <div className="todo-container">
           <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '50vh',
-            }}
+            className="todo-status-container"
+            style={{ flexDirection: 'column' }}
           >
-            <p className="todo-text" style={{ fontSize: '1.25rem' }}>
+            <p className="todo-text todo-status-message">
               데이터를 불러오는 데 실패했습니다.
             </p>
-            <p className="todo-text-muted" style={{ marginTop: '0.5rem' }}>
+            <p className="todo-text-muted todo-error-message-margin">
               에러: {error.message}
             </p>
             <button
-              onClick={fetchAllTodos}
-              style={{
-                marginTop: '1rem',
-                padding: '0.5rem 1rem',
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                borderRadius: '6px',
-                border: 'none',
-                cursor: 'pointer',
-              }}
+              onClick={() => useTodoStore.getState().fetchAllTodos()}
+              className="todo-retry-button"
             >
               다시 시도
             </button>
@@ -87,7 +66,7 @@ export default function TodoPage() {
           <div className="todo-quadrant">
             <TodoQuadrant
               title="중요한 일"
-              todos={todos.filter((todo) => todo.priority === 'high')}
+              todos={processedTodos.high}
               priority="high"
             />
           </div>
@@ -96,7 +75,7 @@ export default function TodoPage() {
           <div className="todo-quadrant">
             <TodoQuadrant
               title="덜 중요한 일"
-              todos={todos.filter((todo) => todo.priority === 'medium')}
+              todos={processedTodos.medium}
               priority="medium"
             />
           </div>
@@ -105,7 +84,7 @@ export default function TodoPage() {
           <div className="todo-quadrant">
             <TodoQuadrant
               title="안 중요한 일"
-              todos={todos.filter((todo) => todo.priority === 'low')}
+              todos={processedTodos.low}
               priority="low"
             />
           </div>
@@ -114,7 +93,7 @@ export default function TodoPage() {
           <div className="todo-quadrant">
             <TodoQuadrant
               title="미뤄둔 일"
-              todos={todos.filter((todo) => todo.priority === 'someday')}
+              todos={processedTodos.someday}
               priority="someday"
             />
           </div>
