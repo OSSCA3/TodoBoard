@@ -45,7 +45,7 @@ export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
       </div>
       <div className="todo-content">
         <div className="todo-scroll-inner">
-          <TodoList todos={todos} />
+          <TodoList todos={todos} priority={priority} />
         </div>
       </div>
     </div>

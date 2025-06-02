@@ -1,14 +1,30 @@
 import { useState } from 'react';
-import { Todo } from '@/types/todo';
+import { Todo, PriorityType } from '@/types/todo';
 import TodoItem from './TodoItem';
+import { useTodoStore } from '@/store/todo/todoStore';
 
 interface TodoListProps {
   todos: Todo[];
+  priority: PriorityType;
 }
 
-export default function TodoList({ todos }: TodoListProps) {
+export default function TodoList({ todos, priority }: TodoListProps) {
   // 로컬 메뉴 상태 관리 (전역에서 로컬로 개선)
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+  // 드롭 힌트 상태와 드래그 상태 가져오기
+  const dropHintState = useTodoStore((state) => state.dropHintState);
+  const dragState = useTodoStore((state) => state.dragState);
+  const allTodos = useTodoStore((state) => state.todos);
+
+  // 현재 드래그 중인 Todo 찾기
+  const draggedTodo = dragState.draggedTodoId
+    ? allTodos.find((todo) => todo.id === Number(dragState.draggedTodoId))
+    : null;
+
+  // 현재 사분면이 드롭 타겟인지 확인
+  const isCurrentQuadrantTarget =
+    dropHintState.isVisible && dropHintState.targetPriority === priority;
 
   const toggleMenu = (id: number) => {
     setOpenMenuId((currentId) => (currentId === id ? null : id));
@@ -23,6 +39,13 @@ export default function TodoList({ todos }: TodoListProps) {
         <p className="todo-text-muted todo-list-empty-message">
           이 섹션에는 할 일이 없습니다.
         </p>
+        {/* 빈 섹션에서도 현재 사분면이 타겟일 때만 드롭 힌트 표시 */}
+        {isCurrentQuadrantTarget && (
+          <div className="todo-drop-hint">
+            <div className="todo-drop-hint-line"></div>
+            <div className="todo-drop-hint-text">여기에 추가됩니다</div>
+          </div>
+        )}
       </div>
     );
   }
@@ -55,10 +78,34 @@ export default function TodoList({ todos }: TodoListProps) {
     );
   };
 
+  // 드롭 힌트를 표시할 위치 결정 (현재 사분면이 타겟일 때만)
+  const shouldShowHintAfterIncomplete =
+    isCurrentQuadrantTarget && (!draggedTodo || !draggedTodo.isCompleted); // 드래그 중인 항목이 미완료이거나 항목을 찾을 수 없는 경우
+
+  const shouldShowHintAfterComplete =
+    isCurrentQuadrantTarget && draggedTodo && draggedTodo.isCompleted; // 드래그 중인 항목이 완료된 경우
+
   return (
     <div className="todo-list">
       {renderTodoSection(incompleteTodos, '미완료')}
+
+      {/* 미완료 항목을 드래그하는 경우 미완료 섹션 아래에 드롭 힌트 표시 */}
+      {shouldShowHintAfterIncomplete && (
+        <div className="todo-drop-hint">
+          <div className="todo-drop-hint-line"></div>
+          <div className="todo-drop-hint-text">여기에 추가됩니다</div>
+        </div>
+      )}
+
       {renderTodoSection(completedTodos, '완료')}
+
+      {/* 완료된 항목을 드래그하는 경우 완료 섹션 아래에 드롭 힌트 표시 */}
+      {shouldShowHintAfterComplete && (
+        <div className="todo-drop-hint">
+          <div className="todo-drop-hint-line"></div>
+          <div className="todo-drop-hint-text">여기에 추가됩니다</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,13 @@ export interface ProcessedTodos {
   someday: { incomplete: Todo[]; completed: Todo[] };
 }
 
+// 드롭 힌트 상태
+export interface DropHintState {
+  isVisible: boolean;
+  targetPriority: PriorityType | null;
+  insertPosition: 'top' | 'bottom' | null; // 미완료 섹션 위/아래
+}
+
 // 통합된 Todo Store 상태 타입 (State + Action 통합)
 export interface TodoState {
   // 원본 데이터
@@ -23,12 +30,16 @@ export interface TodoState {
   // 드래그 상태
   dragState: DragState;
 
+  // 드롭 힌트 상태
+  dropHintState: DropHintState;
+
   // State setter 메서드들
   setTodos: (todos: Todo[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: Error | null) => void;
   setProcessedTodos: (processedTodos: ProcessedTodos) => void;
   setDragState: (dragState: Partial<DragState>) => void;
+  setDropHintState: (dropHintState: Partial<DropHintState>) => void;
 
   // Action 메서드들
   fetchAllTodos: () => Promise<void>;

@@ -679,3 +679,55 @@
   min-height: 0;
   max-height: 100%;
 }
+
+/* ========================================
+   📌 PHASE 2: 드롭 힌트 스타일
+======================================== */
+
+/* 드롭 힌트 컨테이너 */
+.todo-drop-hint {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dropHintFadeIn 0.2s ease-out;
+}
+
+/* 드롭 힌트 점선 */
+.todo-drop-hint-line {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    #4caf50 0px,
+    #4caf50 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  border-radius: 1px;
+  margin-bottom: 0.5rem;
+}
+
+/* 드롭 힌트 텍스트 */
+.todo-drop-hint-text {
+  font-size: 0.75rem;
+  color: #4caf50;
+  font-weight: 500;
+  text-align: center;
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* 드롭 힌트 페이드인 애니메이션 */
+@keyframes dropHintFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

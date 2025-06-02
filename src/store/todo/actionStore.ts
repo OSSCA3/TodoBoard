@@ -181,14 +181,29 @@ export const useTodoActionStore = create<TodoActionMethods>(() => ({
 
   handleDragOver: (event: DragOverEvent) => {
     const { over } = event;
+    const stateStore = useTodoStateStore.getState();
+
     if (over) {
       const dropData = over.data.current as DropData;
       if (dropData) {
-        const stateStore = useTodoStateStore.getState();
         stateStore.setDragState({
           targetPriority: dropData.priority,
         });
+
+        // 드롭 힌트 표시
+        stateStore.setDropHintState({
+          isVisible: true,
+          targetPriority: dropData.priority,
+          insertPosition: 'bottom', // 새로운 todo는 미완료 섹션 하단에 추가
+        });
       }
+    } else {
+      // 드래그가 유효한 드롭 영역 밖에 있을 때 힌트 숨김
+      stateStore.setDropHintState({
+        isVisible: false,
+        targetPriority: null,
+        insertPosition: null,
+      });
     }
   },
 
@@ -201,6 +216,13 @@ export const useTodoActionStore = create<TodoActionMethods>(() => ({
       isDragging: false,
       draggedTodoId: null,
       targetPriority: null,
+    });
+
+    // 드롭 힌트 숨김
+    stateStore.setDropHintState({
+      isVisible: false,
+      targetPriority: null,
+      insertPosition: null,
     });
 
     if (!over) return;
@@ -225,6 +247,13 @@ export const useTodoActionStore = create<TodoActionMethods>(() => ({
       isDragging: false,
       draggedTodoId: null,
       targetPriority: null,
+    });
+
+    // 드롭 힌트 숨김
+    stateStore.setDropHintState({
+      isVisible: false,
+      targetPriority: null,
+      insertPosition: null,
     });
   },
 
