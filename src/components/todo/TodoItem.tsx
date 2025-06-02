@@ -2,6 +2,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { Todo } from '@/types/todo';
 import { formatDate } from '@/utils/todoFormatter';
 import { useTodoStore } from '@/store/todo/todoStore';
+import { useDragStore } from '@/store/todo/dragStore';
 import TodoMenu from './TodoMenu';
 
 interface TodoItemProps {
@@ -17,12 +18,14 @@ export default function TodoItem({
   onMenuToggle,
   onMenuClose,
 }: TodoItemProps) {
-  // store 액션 및 utility 메서드 가져오기
+  // Todo 데이터 관련 - useTodoStore
   const toggleTodoComplete = useTodoStore((state) => state.toggleTodoComplete);
-  const isDragDisabled = useTodoStore((state) => state.isDragDisabled);
-  const isBeingDragged = useTodoStore((state) => state.isBeingDragged);
-  const getTodoItemClass = useTodoStore((state) => state.getTodoItemClass);
-  const createDragData = useTodoStore((state) => state.createDragData);
+
+  // 드래그 관련 - useDragStore
+  const isDragDisabled = useDragStore((state) => state.isDragDisabled);
+  const isBeingDragged = useDragStore((state) => state.isBeingDragged);
+  const getTodoItemClass = useDragStore((state) => state.getTodoItemClass);
+  const createDragData = useDragStore((state) => state.createDragData);
 
   // store 메서드 사용으로 로직 단순화
   const dragData = createDragData(todo);
@@ -37,7 +40,6 @@ export default function TodoItem({
       disabled: disabled,
     });
 
-  // 드래그 변환 스타일
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
@@ -47,7 +49,6 @@ export default function TodoItem({
   return (
     <div className={itemClass}>
       <div className="todo-item-content">
-        {/* 좌측: 체크박스 - 드래그 없음 */}
         <input
           type="checkbox"
           checked={todo.isCompleted}
@@ -55,7 +56,6 @@ export default function TodoItem({
           className="todo-item-checkbox"
         />
 
-        {/* 중앙: 제목과 마감일 - 드래그 가능 영역 */}
         <div
           ref={setNodeRef}
           style={style}
@@ -63,7 +63,6 @@ export default function TodoItem({
           {...listeners}
           {...attributes}
         >
-          {/* 상단: 제목 */}
           <div
             className={`todo-item-title ${
               todo.isCompleted
@@ -74,7 +73,6 @@ export default function TodoItem({
             {todo.title}
           </div>
 
-          {/* 하단: 마감일 */}
           {todo.dueDate && (
             <div
               className={`todo-item-date ${
@@ -86,7 +84,6 @@ export default function TodoItem({
           )}
         </div>
 
-        {/* 우측: 메뉴 - 드래그 없음 (드래그 중일 때는 숨김) */}
         {!beingDragged && (
           <TodoMenu
             todoId={todo.id}

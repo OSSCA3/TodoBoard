@@ -6,6 +6,7 @@ import TodoQuadrant from '@/components/todo/TodoQuadrant';
 import StatusUI from '@/components/todo/StatusUI';
 import DraggedTodoOverlay from '@/components/todo/DraggedTodoOverlay';
 import { useTodoStore } from '@/store/todo/todoStore';
+import { useDragStore } from '@/store/todo/dragStore';
 import '@/styles/todo.css';
 
 const TODO_QUADRANTS = [
@@ -16,15 +17,18 @@ const TODO_QUADRANTS = [
 ] as const;
 
 export default function TodoPage() {
+  // Todo 데이터 관련 - useTodoStore
   const isLoading = useTodoStore((state) => state.isLoading);
   const error = useTodoStore((state) => state.error);
-  const dragState = useTodoStore((state) => state.dragState);
   const todos = useTodoStore((state) => state.todos);
-  const handleDragStart = useTodoStore((state) => state.handleDragStart);
-  const handleDragOver = useTodoStore((state) => state.handleDragOver);
-  const handleDragEnd = useTodoStore((state) => state.handleDragEnd);
-  const handleDragCancel = useTodoStore((state) => state.handleDragCancel);
-  const getQuadrantClass = useTodoStore((state) => state.getQuadrantClass);
+
+  // 드래그 관련 - useDragStore
+  const dragState = useDragStore((state) => state.dragState);
+  const handleDragStart = useDragStore((state) => state.handleDragStart);
+  const handleDragOver = useDragStore((state) => state.handleDragOver);
+  const handleDragEnd = useDragStore((state) => state.handleDragEnd);
+  const handleDragCancel = useDragStore((state) => state.handleDragCancel);
+  const getQuadrantClass = useDragStore((state) => state.getQuadrantClass);
 
   useEffect(() => {
     useTodoStore.getState().fetchAllTodos();

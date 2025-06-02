@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Todo, PriorityType } from '@/types/todo';
-import TodoItem from './TodoItem';
 import { useTodoStore } from '@/store/todo/todoStore';
+import { useDragStore } from '@/store/todo/dragStore';
+import TodoItem from './TodoItem';
 
 interface TodoListProps {
   todos: Todo[];
@@ -12,10 +13,12 @@ export default function TodoList({ todos, priority }: TodoListProps) {
   // 로컬 메뉴 상태 관리 (전역에서 로컬로 개선)
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
 
-  // 드롭 힌트 상태와 드래그 상태 가져오기
-  const dropHintState = useTodoStore((state) => state.dropHintState);
-  const dragState = useTodoStore((state) => state.dragState);
+  // Todo 데이터 관련 - useTodoStore
   const allTodos = useTodoStore((state) => state.todos);
+
+  // 드래그 관련 - useDragStore
+  const dropHintState = useDragStore((state) => state.dropHintState);
+  const dragState = useDragStore((state) => state.dragState);
 
   // 현재 드래그 중인 Todo 찾기
   const draggedTodo = dragState.draggedTodoId
@@ -83,7 +86,7 @@ export default function TodoList({ todos, priority }: TodoListProps) {
     isCurrentQuadrantTarget && (!draggedTodo || !draggedTodo.isCompleted); // 드래그 중인 항목이 미완료이거나 항목을 찾을 수 없는 경우
 
   const shouldShowHintAfterComplete =
-    isCurrentQuadrantTarget && draggedTodo && draggedTodo.isCompleted; // 드래그 중인 항목이 완료된 경우
+    isCurrentQuadrantTarget && draggedTodo && draggedTodo.isCompleted;
 
   return (
     <div className="todo-list">

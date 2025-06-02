@@ -1,6 +1,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { PriorityType } from '@/types/todo';
 import { useTodoStore } from '@/store/todo/todoStore';
+import { useDragStore } from '@/store/todo/dragStore';
 import TodoList from './TodoList';
 
 interface TodoQuadrantProps {
@@ -9,10 +10,12 @@ interface TodoQuadrantProps {
 }
 
 export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
-  // store utility 메서드들 사용
-  const createDropData = useTodoStore((state) => state.createDropData);
+  // Todo 데이터 관련 - useTodoStore
   const getQuadrantTodos = useTodoStore((state) => state.getQuadrantTodos);
   const addTodo = useTodoStore((state) => state.addTodo);
+
+  // 드래그 관련 - useDragStore
+  const createDropData = useDragStore((state) => state.createDropData);
 
   // store 메서드 사용으로 로직 단순화
   const dropData = createDropData(priority);
