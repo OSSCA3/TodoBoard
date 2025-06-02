@@ -1,11 +1,11 @@
 import { Todo } from '@/types/todo';
 import { formatDate } from '@/utils/todoProcessor';
 
-interface TodoContentProps {
+interface TodoBodyProps {
   todo: Todo;
 }
 
-export default function TodoBody({ todo }: TodoContentProps) {
+export default function TodoBody({ todo }: TodoBodyProps) {
   return (
     <>
       <div
