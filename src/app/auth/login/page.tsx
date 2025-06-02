@@ -11,9 +11,14 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setIsLoading(true);
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          redirectTo: `${location.origin}/auth/callback`,
+        },
       });
+
       if (error) {
         console.error('로그인 실패:', error.message);
       }
