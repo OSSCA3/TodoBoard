@@ -1,5 +1,10 @@
 import { createClient } from './client';
 
+/**
+ * Retrieves the current authentication session using a Supabase client.
+ *
+ * @returns The current session object if available, or `null` if retrieval fails.
+ */
 export async function getSessionClient() {
   const supabase = createClient();
   const {

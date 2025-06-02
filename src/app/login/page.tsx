@@ -4,6 +4,11 @@ import { useMemo, useState } from 'react';
 import { createClient } from '@/libs/supabase/client';
 import Button from '@/components/ui/buttons/button';
 
+/**
+ * Renders a login page with a button to sign in using Google OAuth via Supabase.
+ *
+ * Displays a centered login interface with a styled container and a button that initiates the Google sign-in flow. The button is disabled while the login process is in progress.
+ */
 export default function LoginPage() {
   const supabase = useMemo(() => createClient(), []);
   const [isLoading, setIsLoading] = useState(false);
