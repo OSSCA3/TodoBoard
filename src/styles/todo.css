@@ -1,3 +1,6 @@
+/* Todo Page Styles */
+
+/* Page Layout */
 .todo-page {
   background-color: #f3effe;
   color: #000000;
@@ -208,7 +211,7 @@
 .todo-scroll-inner {
   display: flex;
   flex-direction: column;
-  padding-bottom: 60px;
+  padding-bottom: 80px; /* 60px → 80px로 증가 (드롭다운 공간 확보) */
   min-height: 0;
 }
 
