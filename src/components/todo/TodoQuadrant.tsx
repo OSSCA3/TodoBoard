@@ -8,7 +8,11 @@ interface TodoQuadrantProps {
 }
 
 export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
-  const todos = useTodoStore((state) => state.processedTodos[priority]);
+  // store에서 해당 priority의 데이터 직접 가져오기 (완료/미완료 합쳐서)
+  const priorityData = useTodoStore((state) => state.processedTodos[priority]);
+  const todos = [...priorityData.incomplete, ...priorityData.completed];
+  // 더 이상 목업 데이터나 자체적인 API 호출 로직이 필요 없음
+  // 모든 데이터는 props를 통해 TodoPage로부터 전달받음
 
   return (
     <div>
