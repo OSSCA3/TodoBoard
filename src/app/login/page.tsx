@@ -20,11 +20,7 @@ export default function LoginPage() {
           onClick={handleLogin}
           className="w-full flex items-center justify-center gap-2"
         >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="Google logo"
-            className="w-5 h-5"
-          />
+          <img src="/images/Google.png" alt="Google logo" className="w-5 h-5" />
           Google로 로그인
         </Button>
       </div>
