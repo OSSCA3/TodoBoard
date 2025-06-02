@@ -10,14 +10,12 @@ interface TodoStateStore {
   isLoading: boolean;
   error: Error | null;
   processedTodos: ProcessedTodos;
-  openMenuId: number | null;
 
   // 순수 setter들
   setTodos: (todos: Todo[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: Error | null) => void;
   setProcessedTodos: (processedTodos: ProcessedTodos) => void;
-  setOpenMenuId: (id: number | null) => void;
 }
 
 export const useTodoStateStore = create<TodoStateStore>((set) => ({
@@ -26,12 +24,10 @@ export const useTodoStateStore = create<TodoStateStore>((set) => ({
   isLoading: false,
   error: null,
   processedTodos: createInitialProcessedTodos(),
-  openMenuId: null,
 
   // 순수 setter들
   setTodos: (todos) => set({ todos }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
   setProcessedTodos: (processedTodos) => set({ processedTodos }),
-  setOpenMenuId: (openMenuId) => set({ openMenuId }),
 }));

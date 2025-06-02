@@ -26,6 +26,16 @@ export default function TodoMenu({
   useClickOutside({ ref: menuRef, isOpen, onClose });
   const dropdownUp = useDropdownPosition({ ref: menuRef, isOpen });
 
+  // 메뉴 액션 핸들러들
+  const handleEdit = () => {
+    editTodo(todoId);
+    onClose();
+  };
+  const handleDelete = () => {
+    deleteTodo(todoId);
+    onClose();
+  };
+
   return (
     <div className="todo-menu-container" ref={menuRef}>
       <button onClick={onToggle} className="todo-menu-button">
@@ -37,7 +47,7 @@ export default function TodoMenu({
         <div
           className={`todo-menu-dropdown ${dropdownUp ? 'dropdown-up' : ''}`}
         >
-          <button onClick={() => editTodo(todoId)} className="todo-menu-item">
+          <button onClick={handleEdit} className="todo-menu-item">
             <svg
               className="todo-menu-icon"
               fill="none"
@@ -52,10 +62,7 @@ export default function TodoMenu({
               />
             </svg>
           </button>
-          <button
-            onClick={() => deleteTodo(todoId)}
-            className="todo-menu-item delete"
-          >
+          <button onClick={handleDelete} className="todo-menu-item delete">
             <svg
               className="todo-menu-icon"
               fill="none"

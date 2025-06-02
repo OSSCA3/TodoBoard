@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { Todo } from '@/types/todo';
-import { useTodoStore } from '@/store/todo/todoStore';
 import TodoItem from './TodoItem';
 
 interface TodoListProps {
@@ -7,10 +7,15 @@ interface TodoListProps {
 }
 
 export default function TodoList({ todos }: TodoListProps) {
-  // 전역 메뉴 상태 관리
-  const openMenuId = useTodoStore((state) => state.openMenuId);
-  const toggleMenu = useTodoStore((state) => state.toggleMenu);
-  const closeMenu = useTodoStore((state) => state.closeMenu);
+  // 로컬 메뉴 상태 관리 (전역에서 로컬로 개선)
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+  const toggleMenu = (id: number) => {
+    setOpenMenuId((currentId) => (currentId === id ? null : id));
+  };
+  const closeMenu = () => {
+    setOpenMenuId(null);
+  };
 
   if (!todos || todos.length === 0) {
     return (

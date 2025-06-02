@@ -15,10 +15,6 @@ interface TodoActionStore {
   addTodo: (priority: PriorityType) => void;
   editTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
-
-  // 메뉴 비즈니스 로직
-  toggleMenu: (id: number) => void;
-  closeMenu: () => void;
 }
 
 export const useTodoActionStore = create<TodoActionStore>(() => ({
@@ -93,24 +89,11 @@ export const useTodoActionStore = create<TodoActionStore>(() => ({
 
   editTodo: (id: number) => {
     console.log('편집:', id);
-    useTodoStateStore.getState().setOpenMenuId(null);
     // TODO: 나중에 편집 모달/폼 구현 예정
   },
 
   deleteTodo: (id: number) => {
     console.log('삭제:', id);
-    useTodoStateStore.getState().setOpenMenuId(null);
     // TODO: 나중에 삭제 확인 및 실행 구현 예정
-  },
-
-  // 메뉴 비즈니스 로직
-  toggleMenu: (id: number) => {
-    const stateStore = useTodoStateStore.getState();
-    const currentOpenId = stateStore.openMenuId;
-    stateStore.setOpenMenuId(currentOpenId === id ? null : id);
-  },
-
-  closeMenu: () => {
-    useTodoStateStore.getState().setOpenMenuId(null);
   },
 }));
