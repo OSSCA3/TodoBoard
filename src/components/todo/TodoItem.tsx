@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import { Todo } from '@/types/todo';
-import { formatDate } from '@/utils/todoFormatter';
+import { formatDate } from '@/utils/todoProcessor';
 import { useTodoStore } from '@/store/todo/todoStore';
 import { useDragStore } from '@/store/todo/dragStore';
 import TodoMenu from './TodoMenu';

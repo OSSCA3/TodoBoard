@@ -3,15 +3,15 @@ import { useState, useEffect, RefObject } from 'react';
 interface UseDropdownPositionProps {
   ref: RefObject<HTMLElement | null>;
   isOpen: boolean;
-  threshold?: number; // 기본값 100px
-  scrollContainerSelector?: string; // 스크롤 컨테이너 선택자
+  threshold?: number;
+  scrollContainerSelector?: string;
 }
 
 export const useDropdownPosition = ({
   ref,
   isOpen,
   threshold = 100,
-  scrollContainerSelector = '.todo-content', // 기본적으로 todo-content 클래스 사용
+  scrollContainerSelector = '.todo-content',
 }: UseDropdownPositionProps) => {
   const [dropdownUp, setDropdownUp] = useState(false);
 
@@ -27,7 +27,7 @@ export const useDropdownPosition = ({
       const scrollContainer = ref.current.closest(
         scrollContainerSelector,
       ) as HTMLElement;
-      let spaceBelowContainer = Infinity; // 기본값: 충분한 공간
+      let spaceBelowContainer = Infinity;
 
       if (scrollContainer) {
         const containerRect = scrollContainer.getBoundingClientRect();

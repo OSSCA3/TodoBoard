@@ -1,26 +1,25 @@
 import { Todo, PriorityType } from '@/types/todo';
 
+// === 포맷팅 유틸리티 ===
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
+// === 정렬 및 필터링 유틸리티 ===
 // 모든 todos를 날짜별로 정렬하는 함수
 export const sortTodosByDate = (todos: Todo[]): Todo[] => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
   return [...todos].sort((a, b) => {
     // dueDate가 없는 경우 맨 뒤로
     if (!a.dueDate && !b.dueDate) return 0;
     if (!a.dueDate) return 1;
     if (!b.dueDate) return -1;
 
-    const dateA = new Date(a.dueDate);
-    const dateB = new Date(b.dueDate);
-    dateA.setHours(0, 0, 0, 0);
-    dateB.setHours(0, 0, 0, 0);
-
-    // 현재 날짜와의 거리 계산 (절댓값)
-    const diffA = Math.abs(dateA.getTime() - today.getTime());
-    const diffB = Math.abs(dateB.getTime() - today.getTime());
-
-    return diffA - diffB;
+    // 단순 날짜 오름차순 정렬
+    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
   });
 };
 
@@ -32,6 +31,7 @@ export const filterTodosByPriority = (
   return sortedTodos.filter((todo) => todo.priority === priority);
 };
 
+// === 데이터 처리 유틸리티 ===
 // 특정 priority의 완료/미완료 분리 헬퍼 함수
 export const processPriorityTodos = (
   sortedTodos: Todo[],

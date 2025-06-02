@@ -1,5 +1,5 @@
 import { Todo } from '@/types/todo';
-import { formatDate } from '@/utils/todoFormatter';
+import { formatDate } from '@/utils/todoProcessor';
 
 interface DraggedTodoOverlayProps {
   todo: Todo;
