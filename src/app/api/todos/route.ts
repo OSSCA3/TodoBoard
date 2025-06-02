@@ -12,6 +12,7 @@ export async function GET() {
   const { data, error } = await supabaseAdmin
     .from('todo')
     .select('*')
+    .order('priority', { ascending: true })
     .order('order', { ascending: true });
 
   if (error) {
