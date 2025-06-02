@@ -213,6 +213,9 @@
   flex-direction: column;
   padding-bottom: 80px; /* 60px → 80px로 증가 (드롭다운 공간 확보) */
   min-height: 0;
+  /* 드래그 중 레이아웃 안정화 */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Item Styles */
@@ -252,10 +255,7 @@
   outline-offset: 2px;
 }
 
-.todo-item-text {
-  flex: 1;
-  min-width: 0;
-}
+/* .todo-item-text는 이제 드래그 핸들이므로 별도 스타일 불필요 */
 
 .todo-item-title {
   font-size: 0.875rem;
@@ -537,24 +537,52 @@
    📌 DRAG & DROP 스타일
 ======================================== */
 
-/* 드래그 중인 아이템 - 원래 위치에서는 완전히 숨김 */
+/* 드래그 중인 아이템 - 원래 위치에서는 보이지 않지만 공간은 유지 */
 .todo-item-dragging {
   opacity: 0;
   pointer-events: none;
+  /* 레이아웃 공간은 유지하면서 시각적으로만 숨김 */
+  position: relative;
+  transform: none !important;
+  transition: none !important;
 }
 
 /* 드래그 오버레이 스타일 - 마우스를 따라다니는 프리뷰 */
 .todo-item-drag-overlay {
   background-color: #ffffff;
-  border: 2px solid #6750a4;
   border-radius: 8px;
-  padding: 0.8rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   opacity: 0.95;
   z-index: 9999;
   cursor: grabbing;
-  max-width: 300px;
   pointer-events: none;
+  /* 원래 todo-item과 동일한 구조 */
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  width: auto;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+/* 드래그 오버레이 내부 콘텐츠 */
+.todo-item-drag-overlay .todo-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.75rem;
+}
+
+.todo-item-drag-overlay .todo-item-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  border: 2px solid #d1d5db;
+  flex-shrink: 0;
+}
+
+.todo-item-drag-overlay .todo-item-text {
+  flex: 1;
+  min-width: 0;
 }
 
 /* 드래그 비활성화된 아이템 */
@@ -565,7 +593,11 @@
 
 /* 사분면 드래그 상태 */
 .todo-quadrant {
-  transition: all 0.2s ease;
+  /* 크기나 레이아웃에 영향주지 않는 속성만 transition */
+  transition:
+    background-color 0.2s ease,
+    border 0.2s ease,
+    opacity 0.2s ease;
 }
 
 /* 타겟 사분면 (드래그된 아이템이 도착할 곳) */
@@ -573,13 +605,13 @@
   background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
   border: 2px dashed #4caf50;
   border-radius: 12px;
-  transform: scale(1.02);
+  /* scale 제거 - 크기 변화로 인한 레이아웃 변형 방지 */
 }
 
 /* 비활성 사분면 (드래그 중이지만 타겟이 아님) */
 .todo-quadrant.todo-quadrant-inactive {
-  opacity: 0.6;
-  filter: grayscale(30%);
+  opacity: 0.5;
+  filter: grayscale(40%) blur(1px);
 }
 
 /* 기본 드래그 핸들 커서 */
@@ -591,6 +623,27 @@
   cursor: grabbing;
 }
 
+/* 드래그 핸들 영역 (제목 부분) */
+.todo-item-drag-handle {
+  cursor: grab;
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-item-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* 드래그 비활성화된 경우 */
+.todo-item-disabled .todo-item-drag-handle {
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.todo-item-disabled .todo-item-drag-handle:hover {
+  background-color: transparent;
+}
+
 /* 드래그 중 선택 비활성화 */
 .todo-item-dragging,
 .todo-item-dragging * {
@@ -598,4 +651,31 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+/* 드래그 중 페이지 안정화 */
+[data-dnd-context] {
+  /* 드래그 중 전체 레이아웃 고정 */
+  position: relative;
+}
+
+.todo-quadrant-content {
+  /* 내용 영역의 크기 고정 */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.todo-content {
+  /* 스크롤 영역 크기 고정 */
+  width: 100%;
+  position: relative;
+  /* 기존 스타일 유지 */
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  min-height: 0;
+  max-height: 100%;
 }

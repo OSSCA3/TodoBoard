@@ -45,31 +45,24 @@ export default function TodoItem({
     : undefined;
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={itemClass}
-      {...listeners}
-      {...attributes}
-    >
+    <div className={itemClass}>
       <div className="todo-item-content">
-        {/* 좌측: 체크박스 */}
+        {/* 좌측: 체크박스 - 드래그 없음 */}
         <input
           type="checkbox"
           checked={todo.isCompleted}
           onChange={() => toggleTodoComplete(todo.id)}
           className="todo-item-checkbox"
-          // 드래그 중일 때 체크박스 이벤트 방지
-          onClick={(e) => {
-            if (isDragging) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          }}
         />
 
-        {/* 중앙: 제목과 마감일 */}
-        <div className="todo-item-text">
+        {/* 중앙: 제목과 마감일 - 드래그 가능 영역 */}
+        <div
+          ref={setNodeRef}
+          style={style}
+          className="todo-item-text todo-item-drag-handle"
+          {...listeners}
+          {...attributes}
+        >
           {/* 상단: 제목 */}
           <div
             className={`todo-item-title ${
@@ -93,7 +86,7 @@ export default function TodoItem({
           )}
         </div>
 
-        {/* 우측: 메뉴 (드래그 중일 때는 숨김) */}
+        {/* 우측: 메뉴 - 드래그 없음 (드래그 중일 때는 숨김) */}
         {!beingDragged && (
           <TodoMenu
             todoId={todo.id}
