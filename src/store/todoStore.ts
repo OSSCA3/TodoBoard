@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { Todo, PriorityType } from '@/types/todo';
-import { fetchAllTodosFromApi } from '@/libs/api/todoApi'; // API 호출 함수 임포트
+import {
+  fetchAllTodosFromApi,
+  updateTodoCompletionFromApi,
+} from '@/libs/api/todoApi';
 
 // ===== 1. 유틸리티 헬퍼 함수들 =====
 
@@ -105,7 +108,7 @@ interface TodoState {
   addTodo: (priority: PriorityType) => void;
 
   // Todo 아이템 액션
-  toggleTodoComplete: (id: number) => void;
+  toggleTodoComplete: (id: number) => Promise<void>;
   editTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
 
@@ -165,20 +168,50 @@ export const useTodoStore = create<TodoState>((set, get) => ({
     set({ openMenuId: null });
   },
   // Todo 아이템 액션
-  toggleTodoComplete: (id: number) => {
+  toggleTodoComplete: async (id: number) => {
     const state = get();
+    const targetTodo = state.todos.find((todo) => todo.id === id);
+
+    if (!targetTodo) {
+      console.error('Todo not found:', id);
+      return;
+    }
+
+    const newCompletedState = !targetTodo.isCompleted;
+
+    // 먼저 로컬 상태 업데이트 (UI 즉시 반영)
     const updatedTodos = state.todos.map((todo) =>
-      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo,
+      todo.id === id ? { ...todo, isCompleted: newCompletedState } : todo,
     );
 
-    // 원본 데이터 업데이트 및 재처리
     const processedData = processAllTodos(updatedTodos);
     set({
       todos: updatedTodos,
       processedTodos: processedData,
     });
 
-    // TODO: 나중에 서버 업데이트 로직 추가 예정
+    // 서버 업데이트 (백그라운드)
+    try {
+      await updateTodoCompletionFromApi(id, newCompletedState);
+      console.log('Todo completion updated successfully');
+    } catch (err) {
+      console.error('Error updating todo completion:', err);
+
+      // 서버 업데이트 실패 시 원래 상태로 롤백
+      const rollbackTodos = state.todos.map((todo) =>
+        todo.id === id
+          ? { ...todo, isCompleted: targetTodo.isCompleted }
+          : todo,
+      );
+      const rollbackProcessedData = processAllTodos(rollbackTodos);
+      set({
+        todos: rollbackTodos,
+        processedTodos: rollbackProcessedData,
+      });
+
+      // 사용자에게 에러 알림 (추후 토스트 등으로 개선)
+      alert('완료 상태 업데이트에 실패했습니다. 다시 시도해주세요.');
+    }
   },
   editTodo: (id: number) => {
     console.log('편집:', id);

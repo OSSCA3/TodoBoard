@@ -20,3 +20,33 @@ export async function fetchAllTodosFromApi(): Promise<Todo[]> {
     throw error;
   }
 }
+
+export async function updateTodoCompletionFromApi(
+  id: number,
+  isCompleted: boolean,
+): Promise<Todo> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/todos?id=${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isCompleted }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      const errorMessage =
+        errorData?.details ||
+        errorData?.error ||
+        `Failed to update todo completion status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
+
+    const updatedTodo = await response.json();
+    return updatedTodo;
+  } catch (error) {
+    console.error('Error in updateTodoCompletionFromApi:', error);
+    throw error;
+  }
+}

@@ -25,3 +25,48 @@ export async function GET() {
 
   return NextResponse.json({ todos: data });
 }
+
+export async function PATCH(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    const body = await request.json();
+
+    // ID 유효성 검사
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Todo ID is required' },
+        { status: 400 },
+      );
+    }
+
+    const todoId = parseInt(id, 10);
+    if (isNaN(todoId)) {
+      return NextResponse.json({ error: 'Invalid todo ID' }, { status: 400 });
+    }
+
+    // Supabase에서 todo 업데이트
+    const { data, error } = await supabaseAdmin
+      .from('todo')
+      .update(body)
+      .eq('id', todoId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Todo 업데이트 실패', error);
+      return NextResponse.json(
+        { error: 'Todo 업데이트 중 오류가 발생했습니다.' },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error('Unexpected error in PATCH /api/todos:', e);
+    return NextResponse.json(
+      { error: 'An unexpected error occurred' },
+      { status: 500 },
+    );
+  }
+}
