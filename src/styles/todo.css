@@ -48,19 +48,19 @@
   @apply h-75 min-h-75 max-h-75;
 }
 
-.todo-quadrant-header {
+.quadrant-header {
   @apply flex justify-between items-center mb-4 mt-4 flex-shrink-0;
 }
 
-.todo-add-button {
+.add-button {
   @apply bg-transparent border-none cursor-pointer p-1 flex items-center justify-center rounded transition-colors duration-200;
 }
 
-.todo-add-button:hover {
+.add-button:hover {
   @apply bg-gray-100;
 }
 
-.todo-add-icon {
+.add-icon {
   @apply w-6 h-6 text-gray-500;
 }
 
@@ -89,7 +89,7 @@
   @apply text-gray-400;
 }
 
-.todo-title {
+.quadrant-title {
   @apply text-black font-bold text-2xl flex-shrink-0;
 }
 
@@ -99,24 +99,24 @@
 }
 
 /* Scrollable content area */
-.todo-content {
+.content {
   @apply flex-1 overflow-x-hidden overflow-y-auto relative min-h-0 max-h-full;
 }
 
-.todo-content::-webkit-scrollbar-track {
+.content::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
 
-.todo-content::-webkit-scrollbar-thumb {
+.content::-webkit-scrollbar-thumb {
   @apply bg-gray-300 rounded;
 }
 
-.todo-content::-webkit-scrollbar-thumb:hover {
+.content::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
 }
 
 /* 스크롤 컨테이너 내부 */
-.todo-scroll-inner {
+.scroll-inner {
   @apply flex flex-col pb-20 min-h-0 w-full box-border;
 }
 
@@ -297,28 +297,28 @@
    📌 DRAG & DROP 스타일
 ======================================== */
 
-/* 드래그 중인 아이템 - 원래 위치에서는 보이지 않지만 공간은 유지 */
+/* 드래그 중인 아이템 */
 .todo-item-dragging {
   @apply opacity-0 pointer-events-none relative;
   @apply transform-none transition-none;
 }
 
-/* 드래그 오버레이 스타일 - 마우스를 따라다니는 프리뷰 */
-.todo-item-drag-overlay {
+/* 드래그 오버레이 스타일 */
+.drag-overlay {
   @apply bg-white rounded-lg opacity-95 pointer-events-none py-3 border-b border-gray-200 w-auto min-w-70 max-w-96 shadow-xl;
   @apply z-50 cursor-grabbing;
 }
 
 /* 드래그 오버레이 내부 콘텐츠 */
-.todo-item-drag-overlay .todo-item-content {
+.drag-overlay .todo-item-content {
   @apply flex items-center gap-3 px-3;
 }
 
-.todo-item-drag-overlay .todo-item-checkbox {
+.drag-overlay .todo-item-checkbox {
   @apply w-5 h-5 rounded border-2 border-gray-300 flex-shrink-0;
 }
 
-.todo-item-drag-overlay .todo-item-text {
+.drag-overlay .todo-item-text {
   @apply flex-1 min-w-0;
 }
 
@@ -332,14 +332,14 @@
   @apply transition-all duration-200;
 }
 
-/* 타겟 사분면 (드래그된 아이템이 도착할 곳) */
-.todo-quadrant.todo-quadrant-target {
+/* 타겟 사분면 */
+.quadrant-target {
   @apply border-2 border-dashed border-green-500 rounded-xl;
   @apply bg-[linear-gradient(135deg,#e8f5e8,#f0f8f0)];
 }
 
-/* 비활성 사분면 (드래그 중이지만 타겟이 아님) */
-.todo-quadrant.todo-quadrant-inactive {
+/* 비활성 사분면 */
+.quadrant-inactive {
   @apply opacity-50 grayscale blur-sm;
 }
 
@@ -352,7 +352,7 @@
   @apply cursor-grabbing;
 }
 
-/* 드래그 핸들 영역 (제목 부분) */
+/* 드래그 핸들 영역 */
 .todo-item-drag-handle {
   @apply cursor-grab flex-1 min-w-0;
 }
@@ -381,30 +381,30 @@
   @apply relative;
 }
 
-.todo-quadrant-content {
+.quadrant-content {
   @apply w-full h-full overflow-hidden relative;
 }
 
-.todo-content {
+.content {
   @apply w-full relative flex-1 overflow-x-hidden overflow-y-auto min-h-0 max-h-full;
 }
 
 /* ========================================
-   📌 PHASE 2: 드롭 힌트 스타일
+   📌 드롭 힌트 스타일
 ======================================== */
 
 /* 드롭 힌트 컨테이너 */
-.todo-drop-hint {
+.drop-hint {
   @apply py-4 flex flex-col items-center animate-pulse;
 }
 
 /* 드롭 힌트 점선 */
-.todo-drop-hint-line {
+.drop-hint-line {
   @apply w-full h-0.5 rounded mb-2;
   @apply bg-[repeating-linear-gradient(to_right,#4caf50_0px,#4caf50_8px,transparent_8px,transparent_16px)];
 }
 
 /* 드롭 힌트 텍스트 */
-.todo-drop-hint-text {
+.drop-hint-text {
   @apply text-xs text-green-500 font-medium text-center py-1 px-3 rounded-xl border border-green-300 bg-green-50;
 }

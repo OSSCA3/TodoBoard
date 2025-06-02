@@ -10,8 +10,7 @@ export const formatDate = (dateString: string): string => {
 };
 
 // === 정렬 및 필터링 유틸리티 ===
-// 모든 todos를 날짜별로 정렬하는 함수
-export const sortTodosByDate = (todos: Todo[]): Todo[] => {
+export const sortByDate = (todos: Todo[]): Todo[] => {
   return [...todos].sort((a, b) => {
     // dueDate가 없는 경우 맨 뒤로
     if (!a.dueDate && !b.dueDate) return 0;
@@ -23,8 +22,7 @@ export const sortTodosByDate = (todos: Todo[]): Todo[] => {
   });
 };
 
-// 정렬된 todos를 priority별로 분류하는 함수
-export const filterTodosByPriority = (
+export const filterByPriority = (
   sortedTodos: Todo[],
   priority: PriorityType,
 ): Todo[] => {
@@ -32,34 +30,28 @@ export const filterTodosByPriority = (
 };
 
 // === 데이터 처리 유틸리티 ===
-// 특정 priority의 완료/미완료 분리 헬퍼 함수
-export const processPriorityTodos = (
-  sortedTodos: Todo[],
-  priority: PriorityType,
-) => {
-  const priorityTodos = filterTodosByPriority(sortedTodos, priority);
+export const groupByStatus = (sortedTodos: Todo[], priority: PriorityType) => {
+  const priorityTodos = filterByPriority(sortedTodos, priority);
   return {
     incomplete: priorityTodos.filter((todo) => !todo.isCompleted),
     completed: priorityTodos.filter((todo) => todo.isCompleted),
   };
 };
 
-// 모든 데이터를 한 번에 처리하는 함수
-export const processAllTodos = (todos: Todo[]) => {
-  const sortedTodos = sortTodosByDate(todos);
+export const processAll = (todos: Todo[]) => {
+  const sortedTodos = sortByDate(todos);
   const priorities: PriorityType[] = ['high', 'medium', 'low', 'someday'];
 
   return priorities.reduce(
     (acc, priority) => {
-      acc[priority] = processPriorityTodos(sortedTodos, priority);
+      acc[priority] = groupByStatus(sortedTodos, priority);
       return acc;
     },
     {} as Record<PriorityType, { incomplete: Todo[]; completed: Todo[] }>,
   );
 };
 
-// 초기 processedTodos 생성 헬퍼 함수
-export const createInitialProcessedTodos = () => {
+export const createInitialGroups = () => {
   const priorities: PriorityType[] = ['high', 'medium', 'low', 'someday'];
   return priorities.reduce(
     (acc, priority) => {

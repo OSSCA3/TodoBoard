@@ -1,13 +1,13 @@
 import { Todo } from '@/types/todo';
-import TodoBody from './TodoBody';
+import TodoBody from './todo-body';
 
-interface DraggedTodoOverlayProps {
+interface DragOverlayProps {
   todo: Todo;
 }
 
-export default function DraggedTodoOverlay({ todo }: DraggedTodoOverlayProps) {
+const DragOverlay = ({ todo }: DragOverlayProps) => {
   return (
-    <div className="todo-item todo-item-drag-overlay">
+    <div className="todo-item drag-overlay">
       <div className="todo-item-content">
         <input
           type="checkbox"
@@ -22,4 +22,6 @@ export default function DraggedTodoOverlay({ todo }: DraggedTodoOverlayProps) {
       </div>
     </div>
   );
-}
+};
+
+export default DragOverlay;

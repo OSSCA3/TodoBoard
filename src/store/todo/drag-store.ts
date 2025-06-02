@@ -2,36 +2,36 @@ import { create } from 'zustand';
 import { DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { Todo, PriorityType } from '@/types/todo';
 import { DragState, DragData, DropData } from '@/types/dnd';
-import { useTodoStore } from './todoStore';
+import { useTodoStore } from './todo-store';
 
 // 드롭 힌트 상태
-export interface DropHintState {
+export interface HintState {
   isVisible: boolean;
   targetPriority: PriorityType | null;
   insertPosition: 'top' | 'bottom' | null;
 }
 
-// Drag Store 인터페이스 - 드래그 앤 드롭 및 UI 인터랙션 전담
+// Drag Store 인터페이스
 interface DragStore {
   // === 드래그 상태 ===
   dragState: DragState;
-  dropHintState: DropHintState;
+  hintState: HintState;
 
   // === 드래그 핸들러 ===
-  handleDragStart: (event: DragStartEvent) => void;
-  handleDragOver: (event: DragOverEvent) => void;
-  handleDragEnd: (event: DragEndEvent) => Promise<void>;
-  handleDragCancel: () => void;
+  onDragStart: (event: DragStartEvent) => void;
+  onDragOver: (event: DragOverEvent) => void;
+  onDragEnd: (event: DragEndEvent) => Promise<void>;
+  onDragCancel: () => void;
 
   // === UI 헬퍼 메서드 ===
-  isDragDisabled: (todoId: number) => boolean;
-  isBeingDragged: (todoId: number) => boolean;
-  getTodoItemClass: (todoId: number) => string;
+  isDisabled: (todoId: number) => boolean;
+  isDragging: (todoId: number) => boolean;
+  getItemClass: (todoId: number) => string;
   getQuadrantClass: (priority: PriorityType) => string;
 
   // === 데이터 생성 헬퍼 ===
-  createDragData: (todo: Todo) => DragData;
-  createDropData: (priority: PriorityType) => DropData;
+  createDragProps: (todo: Todo) => DragData;
+  createDropProps: (priority: PriorityType) => DropData;
 }
 
 export const useDragStore = create<DragStore>((set, get) => {
@@ -43,7 +43,7 @@ export const useDragStore = create<DragStore>((set, get) => {
         draggedTodoId: null,
         targetPriority: null,
       },
-      dropHintState: {
+      hintState: {
         isVisible: false,
         targetPriority: null,
         insertPosition: null,
@@ -57,14 +57,14 @@ export const useDragStore = create<DragStore>((set, get) => {
       draggedTodoId: null,
       targetPriority: null,
     },
-    dropHintState: {
+    hintState: {
       isVisible: false,
       targetPriority: null,
       insertPosition: null,
     },
 
     // === 드래그 핸들러 ===
-    handleDragStart: (event: DragStartEvent) => {
+    onDragStart: (event: DragStartEvent) => {
       const dragData = event.active.data.current as DragData;
       if (dragData) {
         set({
@@ -77,7 +77,7 @@ export const useDragStore = create<DragStore>((set, get) => {
       }
     },
 
-    handleDragOver: (event: DragOverEvent) => {
+    onDragOver: (event: DragOverEvent) => {
       const dropData = event.over?.data.current as DropData;
 
       set((state) => ({
@@ -85,7 +85,7 @@ export const useDragStore = create<DragStore>((set, get) => {
           ...state.dragState,
           targetPriority: dropData?.priority || null,
         },
-        dropHintState: {
+        hintState: {
           isVisible: !!dropData,
           targetPriority: dropData?.priority || null,
           insertPosition: dropData ? 'bottom' : null,
@@ -93,7 +93,7 @@ export const useDragStore = create<DragStore>((set, get) => {
       }));
     },
 
-    handleDragEnd: async (event: DragEndEvent) => {
+    onDragEnd: async (event: DragEndEvent) => {
       const { active, over } = event;
       resetStates(); // UI 먼저 업데이트
 
@@ -113,20 +113,19 @@ export const useDragStore = create<DragStore>((set, get) => {
       }
     },
 
-    handleDragCancel: resetStates,
+    onDragCancel: resetStates,
 
     // === UI 헬퍼 메서드 ===
-    isDragDisabled: (todoId: number) => useTodoStore.getState().isLoading,
+    isDisabled: (todoId: number) => useTodoStore.getState().isLoading,
 
-    isBeingDragged: (todoId: number) =>
-      get().dragState.draggedTodoId === todoId,
+    isDragging: (todoId: number) => get().dragState.draggedTodoId === todoId,
 
-    getTodoItemClass: (todoId: number) => {
-      const { isDragDisabled, isBeingDragged } = get();
+    getItemClass: (todoId: number) => {
+      const { isDisabled, isDragging } = get();
       return [
         'todo-item',
-        isDragDisabled(todoId) && 'todo-item-disabled',
-        isBeingDragged(todoId) && 'todo-item-dragging',
+        isDisabled(todoId) && 'todo-item-disabled',
+        isDragging(todoId) && 'todo-item-dragging',
       ]
         .filter(Boolean)
         .join(' ');
@@ -136,18 +135,18 @@ export const useDragStore = create<DragStore>((set, get) => {
       const { dragState } = get();
       if (!dragState.isDragging) return '';
       return dragState.targetPriority === priority
-        ? 'todo-quadrant-target'
-        : 'todo-quadrant-inactive';
+        ? 'quadrant-target'
+        : 'quadrant-inactive';
     },
 
     // === 데이터 생성 헬퍼 ===
-    createDragData: (todo: Todo): DragData => ({
+    createDragProps: (todo: Todo): DragData => ({
       id: todo.id,
       currentPriority: todo.priority,
       todo: todo,
     }),
 
-    createDropData: (priority: PriorityType): DropData => ({
+    createDropProps: (priority: PriorityType): DropData => ({
       priority,
     }),
   };

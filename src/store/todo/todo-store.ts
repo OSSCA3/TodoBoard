@@ -1,33 +1,27 @@
 import { create } from 'zustand';
 import { Todo, PriorityType } from '@/types/todo';
-import {
-  fetchAllTodosFromApi,
-  updateTodoCompletionFromApi,
-} from '@/libs/api/todoApi';
-import {
-  processAllTodos,
-  createInitialProcessedTodos,
-} from '@/utils/todoProcessor';
+import { fetchTodos, updateTodoStatus } from '@/libs/api/todo-api';
+import { processAll, createInitialGroups } from '@/utils/todo-processor';
 
-// 처리된 데이터 타입
-export interface ProcessedTodos {
+// 그룹화된 데이터 타입
+export interface GroupedTodos {
   high: { incomplete: Todo[]; completed: Todo[] };
   medium: { incomplete: Todo[]; completed: Todo[] };
   low: { incomplete: Todo[]; completed: Todo[] };
   someday: { incomplete: Todo[]; completed: Todo[] };
 }
 
-// Todo Store 인터페이스 - 데이터 관리 및 CRUD 전담
+// Todo Store 인터페이스
 interface TodoStore {
   // === 상태 ===
   todos: Todo[];
   isLoading: boolean;
   error: Error | null;
-  processedTodos: ProcessedTodos;
+  groupedTodos: GroupedTodos;
 
   // === API 통신 & 데이터 관리 ===
-  fetchAllTodos: () => Promise<void>;
-  toggleTodoComplete: (id: number) => Promise<void>;
+  fetchAll: () => Promise<void>;
+  toggleComplete: (id: number) => Promise<void>;
   moveTodo: (todoId: number, newPriority: PriorityType) => Promise<void>;
 
   // === CRUD 액션 ===
@@ -42,7 +36,7 @@ interface TodoStore {
 export const useTodoStore = create<TodoStore>((set, get) => {
   // 공통 헬퍼 함수들
   const updateTodos = (todos: Todo[]) =>
-    set({ todos, processedTodos: processAllTodos(todos) });
+    set({ todos, groupedTodos: processAll(todos) });
   const findTodo = (id: number) => get().todos.find((todo) => todo.id === id);
   const handleError = (err: unknown, rollback: Todo[], message: string) => {
     console.error(err);
@@ -55,16 +49,16 @@ export const useTodoStore = create<TodoStore>((set, get) => {
     todos: [],
     isLoading: false,
     error: null,
-    processedTodos: createInitialProcessedTodos(),
+    groupedTodos: createInitialGroups(),
 
     // === API 통신 & 데이터 관리 ===
-    fetchAllTodos: async () => {
+    fetchAll: async () => {
       set({ isLoading: true, error: null });
       try {
-        const todos = await fetchAllTodosFromApi();
+        const todos = await fetchTodos();
         set({
           todos,
-          processedTodos: processAllTodos(todos),
+          groupedTodos: processAll(todos),
           isLoading: false,
         });
       } catch (err) {
@@ -75,7 +69,7 @@ export const useTodoStore = create<TodoStore>((set, get) => {
       }
     },
 
-    toggleTodoComplete: async (id: number) => {
+    toggleComplete: async (id: number) => {
       const todo = findTodo(id);
       if (!todo) return console.error('Todo not found:', id);
 
@@ -90,7 +84,7 @@ export const useTodoStore = create<TodoStore>((set, get) => {
       );
 
       try {
-        await updateTodoCompletionFromApi(id, newCompleted);
+        await updateTodoStatus(id, newCompleted);
       } catch (err) {
         handleError(err, originalTodos, '완료 상태 업데이트에 실패했습니다.');
       }
@@ -140,8 +134,8 @@ export const useTodoStore = create<TodoStore>((set, get) => {
 
     // === 헬퍼 메서드 ===
     getQuadrantTodos: (priority: PriorityType) => {
-      const { processedTodos } = get();
-      const data = processedTodos[priority];
+      const { groupedTodos } = get();
+      const data = groupedTodos[priority];
       return [...data.incomplete, ...data.completed];
     },
   };

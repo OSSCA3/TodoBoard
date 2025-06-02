@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import { useTodoStore } from '@/store/todo/todoStore';
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { useDropdownPosition } from '@/hooks/useDropdownPosition';
+import { useTodoStore } from '@/store/todo/todo-store';
+import { useOutsideClick } from '@/hooks/use-outside-click';
+import { useDropdown } from '@/hooks/use-dropdown';
 
 interface TodoMenuProps {
   todoId: number;
@@ -10,12 +10,7 @@ interface TodoMenuProps {
   onClose: () => void;
 }
 
-export default function TodoMenu({
-  todoId,
-  isOpen,
-  onToggle,
-  onClose,
-}: TodoMenuProps) {
+const TodoMenu = ({ todoId, isOpen, onToggle, onClose }: TodoMenuProps) => {
   // store 액션들 가져오기
   const editTodo = useTodoStore((state) => state.editTodo);
   const deleteTodo = useTodoStore((state) => state.deleteTodo);
@@ -23,8 +18,8 @@ export default function TodoMenu({
   const menuRef = useRef<HTMLDivElement>(null);
 
   // 커스텀 훅 사용
-  useClickOutside({ ref: menuRef, isOpen, onClose });
-  const dropdownUp = useDropdownPosition({ ref: menuRef, isOpen });
+  useOutsideClick({ ref: menuRef, isOpen, onClose });
+  const dropdownUp = useDropdown({ ref: menuRef, isOpen });
 
   // 메뉴 액션 핸들러들
   const handleEdit = () => {
@@ -81,4 +76,6 @@ export default function TodoMenu({
       )}
     </div>
   );
-}
+};
+
+export default TodoMenu;

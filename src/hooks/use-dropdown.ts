@@ -1,18 +1,18 @@
 import { useState, useEffect, RefObject } from 'react';
 
-interface UseDropdownPositionProps {
+interface UseDropdownProps {
   ref: RefObject<HTMLElement | null>;
   isOpen: boolean;
   threshold?: number;
   scrollContainerSelector?: string;
 }
 
-export const useDropdownPosition = ({
+export const useDropdown = ({
   ref,
   isOpen,
   threshold = 100,
   scrollContainerSelector = '.todo-content',
-}: UseDropdownPositionProps) => {
+}: UseDropdownProps) => {
   const [dropdownUp, setDropdownUp] = useState(false);
 
   useEffect(() => {

@@ -1,21 +1,21 @@
 import { useDroppable } from '@dnd-kit/core';
 import { PriorityType } from '@/types/todo';
-import { useTodoStore } from '@/store/todo/todoStore';
-import { useDragStore } from '@/store/todo/dragStore';
-import TodoList from './TodoList';
+import { useTodoStore } from '@/store/todo/todo-store';
+import { useDragStore } from '@/store/todo/drag-store';
+import TodoList from './todo-list';
 
-interface TodoQuadrantProps {
+interface QuadrantProps {
   title: string;
   priority: PriorityType;
 }
 
-export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
+const Quadrant = ({ title, priority }: QuadrantProps) => {
   // Todo 관련
   const addTodo = useTodoStore((state) => state.addTodo);
 
   // 드래그 관련
-  const createDropData = useDragStore((state) => state.createDropData);
-  const dropData = createDropData(priority);
+  const createDropProps = useDragStore((state) => state.createDropProps);
+  const dropData = createDropProps(priority);
 
   // Droppable 설정
   const { setNodeRef } = useDroppable({
@@ -24,15 +24,15 @@ export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
   });
 
   return (
-    <div ref={setNodeRef} className="todo-quadrant-content">
-      <div className="todo-quadrant-header">
-        <h2 className="todo-title">{title}</h2>
-        <button onClick={() => addTodo(priority)} className="todo-add-button">
+    <div ref={setNodeRef} className="quadrant-content">
+      <div className="quadrant-header">
+        <h2 className="quadrant-title">{title}</h2>
+        <button onClick={() => addTodo(priority)} className="add-button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="todo-add-icon"
+            className="add-icon"
           >
             <path
               fillRule="evenodd"
@@ -42,11 +42,13 @@ export default function TodoQuadrant({ title, priority }: TodoQuadrantProps) {
           </svg>
         </button>
       </div>
-      <div className="todo-content">
-        <div className="todo-scroll-inner">
+      <div className="content">
+        <div className="scroll-inner">
           <TodoList priority={priority} />
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Quadrant;

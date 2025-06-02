@@ -1,16 +1,16 @@
 import { useEffect, RefObject } from 'react';
 
-interface UseClickOutsideProps {
+interface UseOutsideClickProps {
   ref: RefObject<HTMLElement | null>;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const useClickOutside = ({
+export const useOutsideClick = ({
   ref,
   isOpen,
   onClose,
-}: UseClickOutsideProps) => {
+}: UseOutsideClickProps) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

@@ -2,7 +2,7 @@ import { Todo } from '@/types/todo';
 
 const API_BASE_URL = '/api';
 
-export async function fetchAllTodosFromApi(): Promise<Todo[]> {
+export const fetchTodos = async (): Promise<Todo[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}/todos`);
 
@@ -16,15 +16,15 @@ export async function fetchAllTodosFromApi(): Promise<Todo[]> {
       ...todo,
     }));
   } catch (error) {
-    console.error('Error in fetchAllTodosFromApi:', error);
+    console.error('Error in fetchTodos:', error);
     throw error;
   }
-}
+};
 
-export async function updateTodoCompletionFromApi(
+export const updateTodoStatus = async (
   id: number,
   isCompleted: boolean,
-): Promise<Todo> {
+): Promise<Todo> => {
   try {
     const response = await fetch(`${API_BASE_URL}/todos?id=${id}`, {
       method: 'PATCH',
@@ -40,7 +40,7 @@ export async function updateTodoCompletionFromApi(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in updateTodoCompletionFromApi:', error);
+    console.error('Error in updateTodoStatus:', error);
     throw error;
   }
-}
+};

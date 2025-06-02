@@ -1,10 +1,10 @@
-import { useTodoStore } from '@/store/todo/todoStore';
+import { useTodoStore } from '@/store/todo/todo-store';
 
 interface StatusUIProps {
   type: 'loading' | 'error';
 }
 
-export default function StatusUI({ type }: StatusUIProps) {
+const StatusUI = ({ type }: StatusUIProps) => {
   if (type === 'loading') {
     return (
       <div className="todo-page">
@@ -30,7 +30,7 @@ export default function StatusUI({ type }: StatusUIProps) {
             데이터를 불러오는 데 실패했습니다.
           </p>
           <button
-            onClick={() => useTodoStore.getState().fetchAllTodos()}
+            onClick={() => useTodoStore.getState().fetchAll()}
             className="todo-retry-button"
           >
             🔄 다시 시도
@@ -41,4 +41,6 @@ export default function StatusUI({ type }: StatusUIProps) {
   }
 
   return null;
-}
+};
+
+export default StatusUI;

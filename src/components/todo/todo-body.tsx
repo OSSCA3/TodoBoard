@@ -1,11 +1,11 @@
 import { Todo } from '@/types/todo';
-import { formatDate } from '@/utils/todoProcessor';
+import { formatDate } from '@/utils/todo-processor';
 
 interface TodoBodyProps {
   todo: Todo;
 }
 
-export default function TodoBody({ todo }: TodoBodyProps) {
+const TodoBody = ({ todo }: TodoBodyProps) => {
   return (
     <>
       <div
@@ -29,4 +29,6 @@ export default function TodoBody({ todo }: TodoBodyProps) {
       )}
     </>
   );
-}
+};
+
+export default TodoBody;
