@@ -13,18 +13,22 @@ const ModalFooter = ({
   submitText = '저장',
   formId,
 }: ModalFooterProps) => {
+  const showSubmitButton = !!onSubmit || !!formId;
+
   return (
     <div className="p-4 w-full flex justify-end gap-2">
       <Button variant="secondary" onClick={onClose}>
         닫기
       </Button>
-      <Button
-        onClick={onSubmit}
-        form={formId}
-        type={formId ? 'submit' : 'button'}
-      >
-        {submitText}
-      </Button>
+      {showSubmitButton && (
+        <Button
+          onClick={onSubmit}
+          form={formId}
+          type={formId ? 'submit' : 'button'}
+        >
+          {submitText}
+        </Button>
+      )}
     </div>
   );
 };
