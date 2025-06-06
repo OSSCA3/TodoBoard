@@ -3,6 +3,7 @@ import { PriorityType } from '@/types/todo';
 import { useTodoStore } from '@/store/todo/todo-store';
 import { useDragStore } from '@/store/todo/drag-store';
 import TodoList from './todo-list';
+import { Button } from '../ui/buttons';
 
 interface QuadrantProps {
   title: string;
@@ -27,7 +28,7 @@ const Quadrant = ({ title, priority }: QuadrantProps) => {
     <div ref={setNodeRef} className="quadrant-content">
       <div className="quadrant-header">
         <h2 className="quadrant-title">{title}</h2>
-        <button onClick={() => addTodo(priority)} className="add-button">
+        <Button href={`todo/add?priority=${priority}`} variant="link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -40,7 +41,7 @@ const Quadrant = ({ title, priority }: QuadrantProps) => {
               clipRule="evenodd"
             />
           </svg>
-        </button>
+        </Button>
       </div>
       <div className="content">
         <div className="scroll-inner">

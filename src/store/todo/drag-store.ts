@@ -24,9 +24,9 @@ interface DragStore {
   onDragCancel: () => void;
 
   // === UI 헬퍼 메서드 ===
-  isDisabled: (todoId: number) => boolean;
-  isDragging: (todoId: number) => boolean;
-  getItemClass: (todoId: number) => string;
+  isDisabled: (todoId: string) => boolean;
+  isDragging: (todoId: string) => boolean;
+  getItemClass: (todoId: string) => string;
   getQuadrantClass: (priority: PriorityType) => string;
 
   // === 데이터 생성 헬퍼 ===
@@ -116,11 +116,11 @@ export const useDragStore = create<DragStore>((set, get) => {
     onDragCancel: resetStates,
 
     // === UI 헬퍼 메서드 ===
-    isDisabled: (todoId: number) => useTodoStore.getState().isLoading,
+    isDisabled: (todoId: string) => useTodoStore.getState().isLoading,
 
-    isDragging: (todoId: number) => get().dragState.draggedTodoId === todoId,
+    isDragging: (todoId: string) => get().dragState.draggedTodoId === todoId,
 
-    getItemClass: (todoId: number) => {
+    getItemClass: (todoId: string) => {
       const { isDisabled, isDragging } = get();
       return [
         'todo-item',

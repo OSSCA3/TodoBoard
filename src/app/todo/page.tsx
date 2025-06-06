@@ -7,9 +7,10 @@ import StatusUI from '@/components/todo/status-ui';
 import TodoDragOverlay from '@/components/todo/drag-overlay';
 import { useTodoStore } from '@/store/todo/todo-store';
 import { useDragStore } from '@/store/todo/drag-store';
+import { PriorityType } from '@/types/todo';
 import '@/styles/todo.css';
 
-const QUADRANTS = [
+const QUADRANTS: { title: string; priority: PriorityType }[] = [
   { title: '중요한 일', priority: 'high' },
   { title: '덜 중요한 일', priority: 'medium' },
   { title: '안 중요한 일', priority: 'low' },
@@ -37,7 +38,7 @@ const TodoPage = () => {
 
   // 드래그 중인 Todo
   const draggedTodo = dragState.draggedTodoId
-    ? todos.find((todo) => todo.id === Number(dragState.draggedTodoId))
+    ? todos.find((todo) => todo.id === dragState.draggedTodoId)
     : null;
 
   if (isLoading || error) {

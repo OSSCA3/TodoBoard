@@ -52,14 +52,6 @@
   @apply flex justify-between items-center mb-4 mt-4 flex-shrink-0;
 }
 
-.add-button {
-  @apply bg-transparent border-none cursor-pointer p-1 flex items-center justify-center rounded transition-colors duration-200;
-}
-
-.add-button:hover {
-  @apply bg-gray-100;
-}
-
 .add-icon {
   @apply w-6 h-6 text-gray-500;
 }

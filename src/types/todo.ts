@@ -1,11 +1,12 @@
-export type PriorityType = 'high' | 'medium' | 'low' | 'someday';
+export const Priorities = ['high', 'medium', 'low', 'someday'] as const;
+export type PriorityType = (typeof Priorities)[number];
 // export type TagType = 'work' | 'dev' | 'personal';
 
 export interface Todo {
-  id: number;
+  id: string;
   title: string;
   isCompleted: boolean;
-  dueDate: string | null;
+  dueDate: string;
   priority: PriorityType;
   // tag?: TagType | null;
   // order: number;

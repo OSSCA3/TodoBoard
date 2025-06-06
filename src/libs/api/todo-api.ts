@@ -22,7 +22,7 @@ export const fetchTodos = async (): Promise<Todo[]> => {
 };
 
 export const updateTodoStatus = async (
-  id: number,
+  id: string,
   isCompleted: boolean,
 ): Promise<Todo> => {
   try {

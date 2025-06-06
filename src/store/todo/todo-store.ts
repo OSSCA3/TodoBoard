@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Todo, PriorityType } from '@/types/todo';
 import { fetchTodos, updateTodoStatus } from '@/libs/api/todo-api';
 import { processAll, createInitialGroups } from '@/utils/todo-processor';
+import { addTodo } from '@/libs/api/todo';
 
 // 그룹화된 데이터 타입
 export interface GroupedTodos {
@@ -21,13 +22,13 @@ interface TodoStore {
 
   // === API 통신 & 데이터 관리 ===
   fetchAll: () => Promise<void>;
-  toggleComplete: (id: number) => Promise<void>;
-  moveTodo: (todoId: number, newPriority: PriorityType) => Promise<void>;
+  toggleComplete: (id: string) => Promise<void>;
+  moveTodo: (todoId: string, newPriority: PriorityType) => Promise<void>;
 
   // === CRUD 액션 ===
-  addTodo: (priority: PriorityType) => void;
-  editTodo: (id: number) => void;
-  deleteTodo: (id: number) => void;
+  addTodo: (newTodo: Todo, priority: PriorityType) => void;
+  editTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
 
   // === 헬퍼 메서드 ===
   getQuadrantTodos: (priority: PriorityType) => Todo[];
@@ -37,7 +38,7 @@ export const useTodoStore = create<TodoStore>((set, get) => {
   // 공통 헬퍼 함수들
   const updateTodos = (todos: Todo[]) =>
     set({ todos, groupedTodos: processAll(todos) });
-  const findTodo = (id: number) => get().todos.find((todo) => todo.id === id);
+  const findTodo = (id: string) => get().todos.find((todo) => todo.id === id);
   const handleError = (err: unknown, rollback: Todo[], message: string) => {
     console.error(err);
     updateTodos(rollback);
@@ -69,7 +70,7 @@ export const useTodoStore = create<TodoStore>((set, get) => {
       }
     },
 
-    toggleComplete: async (id: number) => {
+    toggleComplete: async (id: string) => {
       const todo = findTodo(id);
       if (!todo) return console.error('Todo not found:', id);
 
@@ -90,7 +91,7 @@ export const useTodoStore = create<TodoStore>((set, get) => {
       }
     },
 
-    moveTodo: async (todoId: number, newPriority: PriorityType) => {
+    moveTodo: async (todoId: string, newPriority: PriorityType) => {
       const todo = findTodo(todoId);
       if (!todo || todo.priority === newPriority) return;
 
@@ -117,17 +118,29 @@ export const useTodoStore = create<TodoStore>((set, get) => {
     },
 
     // === CRUD 액션 ===
-    addTodo: (priority: PriorityType) => {
-      console.log('할 일 추가:', priority);
-      // TODO: 추가 모달/폼 구현 예정
+    addTodo: async (newTodo: Todo, priority: PriorityType) => {
+      try {
+        // API 호출
+        await addTodo(newTodo.title, newTodo.dueDate, priority);
+        // 업데이트
+        const todos = get().todos;
+        const updatedTodos = [...todos, { ...newTodo, priority }];
+        updateTodos(updatedTodos);
+      } catch (error) {
+        handleError(
+          error,
+          get().todos,
+          '할 일을 추가하는 중 오류가 발생했습니다.',
+        );
+      }
     },
 
-    editTodo: (id: number) => {
+    editTodo: (id: string) => {
       console.log('편집:', id);
       // TODO: 편집 모달/폼 구현 예정
     },
 
-    deleteTodo: (id: number) => {
+    deleteTodo: (id: string) => {
       console.log('삭제:', id);
       // TODO: 삭제 확인 및 실행 구현 예정
     },

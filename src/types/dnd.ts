@@ -2,7 +2,7 @@ import { Todo, PriorityType } from './todo';
 
 // 드래그 데이터 타입
 export interface DragData {
-  id: number;
+  id: string; // Todo ID
   currentPriority: PriorityType;
   todo: Todo;
 }
@@ -15,6 +15,6 @@ export interface DropData {
 // 드래그 상태 타입
 export interface DragState {
   isDragging: boolean;
-  draggedTodoId: number | null;
+  draggedTodoId: string | null;
   targetPriority: PriorityType | null;
 }
