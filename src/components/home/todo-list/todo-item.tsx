@@ -1,12 +1,11 @@
 'use client';
-
-import { TodoItem } from '@/types/todo-list';
 import React, { useState } from 'react';
 import { IoIosMore } from 'react-icons/io';
+import { Todo } from '@/types/todo';
 import CheckBox from './checkbox';
 
 interface TodoListProps {
-  todo: TodoItem;
+  todo: Todo;
 }
 const TodoListItem = ({ todo }: TodoListProps) => {
   const [isCompleted, setIsCompleted] = useState(todo.isCompleted);

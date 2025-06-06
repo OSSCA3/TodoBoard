@@ -1,6 +1,6 @@
 import React from 'react';
+import { Todo } from '@/types/todo';
 import TodoListItem from './todo-item';
-import { TodoItem } from '@/types/todo-list';
 
 const TodoList = async () => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -9,7 +9,7 @@ const TodoList = async () => {
     const res = await fetch(`${baseUrl}/api/todos`, {});
     if (!res.ok) console.error('할 일 목록 조회를 실패했어요');
     const json = await res.json();
-    const todos: TodoItem[] = json.todos || [];
+    const todos: Todo[] = json.todos || [];
 
     return (
       <div className="rounded-xl h-full w-full">
