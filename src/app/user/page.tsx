@@ -8,8 +8,8 @@ import { updateIntro } from '@/libs/supabase/update-intro';
 import { toast } from 'react-hot-toast';
 
 export default function UserPage() {
-  const [intro, setIntro] = useState('');
-  const [userId, setUserId] = useState<string | null>(null);
+  const [intro, setIntro] = useState<string>('');
+  //const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
   // 사용자 세션 가져오기 및 intro 초기값 불러오기
@@ -25,8 +25,6 @@ export default function UserPage() {
       }
 
       const id = session.user.id;
-      setUserId(id);
-
       const { data, error } = await supabase
         .from('profiles')
         .select('intro')
@@ -47,9 +45,9 @@ export default function UserPage() {
   const handleSaveIntro = async () => {
     try {
       await updateIntro(intro);
-      alert('한줄소개가 저장되었습니다.');
+      toast.success('한줄소개가 저장되었습니다.');
     } catch (error) {
-      alert('저장 실패: ' + (error as Error).message);
+      toast.error('저장 실패: ' + (error as Error).message);
     }
   };
 
@@ -107,16 +105,39 @@ export default function UserPage() {
 
   // 로그아웃
   const handleLogout = async () => {
-    const confirmed = confirm('정말 로그아웃하시겠습니까?');
-    if (!confirmed) return;
+    toast(
+      (t) => (
+        <div className="text-sm">
+          <p className="mb-2">정말 로그아웃하시겠습니까?</p>
+          <div className="flex gap-2">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                const supabase = createClient();
+                const { error } = await supabase.auth.signOut();
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert('로그아웃 실패: ' + error.message);
-    } else {
-      router.push('/auth/login');
-    }
+                if (error) {
+                  toast.error('로그아웃 실패: ' + error.message);
+                } else {
+                  toast.success('로그아웃 되었습니다.');
+                  router.push('/auth/login');
+                }
+              }}
+              className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+            >
+              확인
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="border border-gray-300 text-gray-700 px-3 py-1 rounded text-sm"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity },
+    );
   };
 
   return (
