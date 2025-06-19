@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/libs/supabase/client';
 import { getSessionClient } from '@/libs/supabase/get-session-client';
+import { updateIntro } from '@/libs/supabase/update-intro';
 
 export default function UserPage() {
   const [intro, setIntro] = useState('');
@@ -44,20 +45,11 @@ export default function UserPage() {
 
   // 한줄소개 저장
   const handleSaveIntro = async () => {
-    if (!userId) {
-      alert('로그인 상태를 확인할 수 없습니다.');
-      return;
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({ intro })
-      .eq('id', userId);
-
-    if (error) {
-      alert('저장 실패: ' + error.message);
-    } else {
+    try {
+      await updateIntro(intro);
       alert('한줄소개가 저장되었습니다.');
+    } catch (error) {
+      alert('저장 실패: ' + (error as Error).message);
     }
   };
 
