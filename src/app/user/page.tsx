@@ -93,40 +93,35 @@ export default function UserPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F3F0FF] relative">
-      <main className="pl-20 pt-12 pb-12 px-8 max-w-4xl mx-auto bg-white rounded-tl-2xl shadow-md min-h-screen">
-        <h1 className="text-lg font-semibold mb-4">한줄소개</h1>
-        <textarea
-          className="w-[330px] h-[50px] p-2 border border-[#a78bfa] rounded-md text-sm outline-none focus:ring-2 focus:ring-[#a78bfa]"
-          placeholder="한줄소개를 작성해주세요."
-          value={intro}
-          onChange={(e) => setIntro(e.target.value)}
-        />
-
-        {/* 저장 및 로그아웃 버튼 */}
-        <div className="mt-4 flex gap-4">
-          <button
-            className="bg-[#D7E8F7] hover:bg-[#c2dcf4] text-black px-4 py-2 rounded-xl"
-            onClick={handleSaveIntro}
-          >
-            저장하기
-          </button>
-          <button
-            className="bg-[#EDEDED] hover:bg-[#dcdcdc] text-black px-4 py-2 rounded-xl"
-            onClick={handleLogout}
-          >
-            로그아웃
-          </button>
-        </div>
-
-        {/* 탈퇴 버튼 */}
+    <section className="max-w-3xl w-full bg-white rounded-r-2xl shadow-md p-8">
+      <h1 className="text-lg font-semibold mb-4">한줄소개</h1>
+      <textarea
+        className="w-full h-[60px] p-2 border border-[#a78bfa] rounded-md text-sm outline-none focus:ring-2 focus:ring-[#a78bfa]"
+        placeholder="한줄소개를 작성해주세요."
+        value={intro}
+        onChange={(e) => setIntro(e.target.value)}
+      />
+      <div className="mt-4 flex gap-4">
         <button
-          className="absolute bottom-12 right-12 px-4 py-2 bg-[#F4DADA] hover:bg-[#e9cfcf] text-black rounded-xl"
-          onClick={handleDeleteAccount}
+          className="bg-[#D7E8F7] hover:bg-[#c2dcf4] text-black px-4 py-2 rounded-xl"
+          onClick={handleSaveIntro}
         >
-          탈퇴하기
+          저장하기
         </button>
-      </main>
-    </div>
+        <button
+          className="bg-[#EDEDED] hover:bg-[#dcdcdc] text-black px-4 py-2 rounded-xl"
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
+      </div>
+
+      <button
+        className="absolute bottom-12 right-12 px-4 py-2 bg-[#F4DADA] hover:bg-[#e9cfcf] text-black rounded-xl"
+        onClick={handleDeleteAccount}
+      >
+        탈퇴하기
+      </button>
+    </section>
   );
 }
