@@ -98,6 +98,7 @@ export default function UserPage() {
     const confirmed = confirm('정말 로그아웃하시겠습니까?');
     if (!confirmed) return;
 
+    const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (error) {
       alert('로그아웃 실패: ' + error.message);
