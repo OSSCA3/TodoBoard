@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/sidebar';
 import { createClient } from '@/libs/supabase/client';
 import { getSessionClient } from '@/libs/supabase/get-session-client';
 
@@ -95,9 +94,7 @@ export default function UserPage() {
 
   return (
     <div className="flex min-h-screen bg-[#F3F0FF] relative">
-      <Sidebar />
-
-      <main className="flex-1 p-12 bg-white rounded-tl-2xl shadow-md relative">
+      <main className="pl-20 pt-12 pb-12 px-8 max-w-4xl mx-auto bg-white rounded-tl-2xl shadow-md min-h-screen">
         <h1 className="text-lg font-semibold mb-4">한줄소개</h1>
         <textarea
           className="w-[330px] h-[50px] p-2 border border-[#a78bfa] rounded-md text-sm outline-none focus:ring-2 focus:ring-[#a78bfa]"
