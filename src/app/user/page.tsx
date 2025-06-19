@@ -64,14 +64,26 @@ export default function UserPage() {
               onClick={async () => {
                 toast.dismiss(t.id); // 토스트 닫기
 
-                const res = await fetch('/api/delete-user', { method: 'POST' });
+                try {
+                  const res = await fetch('/api/delete-user', {
+                    method: 'POST',
+                  });
 
-                if (res.ok) {
-                  toast.success('탈퇴가 완료되었습니다.');
-                  router.push('/auth/login');
-                } else {
-                  const { error } = await res.json();
-                  toast.error('탈퇴 실패: ' + error);
+                  if (res.ok) {
+                    toast.success('탈퇴가 완료되었습니다.');
+                    router.push('/auth/login');
+                  } else {
+                    const contentType = res.headers.get('content-type');
+                    if (contentType?.includes('application/json')) {
+                      const { error } = await res.json();
+                      toast.error('탈퇴 실패: ' + error);
+                    } else {
+                      toast.error('탈퇴 처리 중 오류가 발생했습니다.');
+                    }
+                  }
+                } catch (error) {
+                  console.error('탈퇴 요청 실패:', error);
+                  toast.error('네트워크 오류가 발생했습니다.');
                 }
               }}
               className="bg-red-500 text-white px-3 py-1 rounded text-sm"
