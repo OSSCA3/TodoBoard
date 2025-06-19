@@ -5,16 +5,17 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/libs/supabase/client';
 import { getSessionClient } from '@/libs/supabase/get-session-client';
 import { updateIntro } from '@/libs/supabase/update-intro';
+import { toast } from 'react-hot-toast';
 
 export default function UserPage() {
   const [intro, setIntro] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
 
   // 사용자 세션 가져오기 및 intro 초기값 불러오기
   useEffect(() => {
     const fetchData = async () => {
+      const supabase = createClient();
       const session = await getSessionClient();
 
       // 비로그인시 /login으로 리디렉션
@@ -39,9 +40,8 @@ export default function UserPage() {
 
       setIntro(data?.intro ?? '');
     };
-
     fetchData();
-  }, [supabase]);
+  }, []);
 
   // 한줄소개 저장
   const handleSaveIntro = async () => {
@@ -54,21 +54,43 @@ export default function UserPage() {
   };
 
   // 탈퇴하기
-  const handleDeleteAccount = async () => {
-    const confirmed = confirm('정말 탈퇴하시겠습니까?');
-    if (!confirmed) return;
+  const handleDeleteAccount = () => {
+    toast(
+      (t) => (
+        <div className="text-sm">
+          <p className="mb-2">정말 탈퇴하시겠습니까?</p>
+          <div className="flex gap-2">
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id); // 토스트 닫기
 
-    const res = await fetch('/api/delete-user', {
-      method: 'POST',
-    });
+                const res = await fetch('/api/delete-user', { method: 'POST' });
 
-    if (res.ok) {
-      alert('탈퇴가 완료되었습니다.');
-      router.push('/auth/login');
-    } else {
-      const { error } = await res.json();
-      alert('탈퇴 실패: ' + error);
-    }
+                if (res.ok) {
+                  toast.success('탈퇴가 완료되었습니다.');
+                  router.push('/auth/login');
+                } else {
+                  const { error } = await res.json();
+                  toast.error('탈퇴 실패: ' + error);
+                }
+              }}
+              className="bg-red-500 text-white px-3 py-1 rounded text-sm"
+            >
+              확인
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="border border-gray-300 text-gray-700 px-3 py-1 rounded text-sm"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        duration: Infinity, // 사용자가 직접 닫기 전까지 유지
+      },
+    );
   };
 
   // 로그아웃
@@ -110,12 +132,14 @@ export default function UserPage() {
         </button>
       </div>
 
-      <button
-        className="absolute bottom-12 right-12 px-4 py-2 bg-[#F4DADA] hover:bg-[#e9cfcf] text-black rounded-xl"
-        onClick={handleDeleteAccount}
-      >
-        탈퇴하기
-      </button>
+      <div className="mt-8 pt-8 border-t border-gray-200">
+        <button
+          className="px-4 py-2 bg-[#F4DADA] hover:bg-[#e9cfcf] text-black rounded-xl"
+          onClick={handleDeleteAccount}
+        >
+          탈퇴하기
+        </button>
+      </div>
     </>
   );
 }

@@ -17,11 +17,23 @@ export default function Sidebar() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     (async () => {
-      const session = await getSessionClient();
-      const avatar = session?.user?.user_metadata?.avatar_url;
-      setAvatarUrl(avatar ?? null);
+      try {
+        const session = await getSessionClient();
+        const avatar = session?.user?.user_metadata?.avatar_url;
+        if (isMounted) {
+          setAvatarUrl(avatar ?? null);
+        }
+      } catch (error) {
+        console.error('아바타 정보 가져오기 실패:', error);
+      }
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
