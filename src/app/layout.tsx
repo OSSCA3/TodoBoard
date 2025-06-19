@@ -26,9 +26,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <Sidebar />
-
-        {children}
+        <div className="flex min-h-screen bg-[#F3EFFE]">
+          <Sidebar />
+          <main className="flex=1 pl-20 p-6">{children}</main>
+        </div>
         {modal}
       </body>
     </html>
